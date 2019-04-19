@@ -1,0 +1,35 @@
+Hotel_The_Ritz_Carlton Hong_Kong 28781
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Eaton_HK Yau_Ma_Tei 6985
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Conrad Hong_Kong 19709
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Hotel_The_Ritz_Carlton Hong_Kong 28781
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Hotel_Kowloon_Shangri-La Hong_Kong 16490
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5

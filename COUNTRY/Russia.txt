@@ -1,0 +1,35 @@
+Hotel_Four_Seasons Moscow 42552
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Hilton_Garden_Inn Krasnodar 9401
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Radisson_Collection_Paradise_Resort_and_Suit Sochi 11331
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Inter_Continental_Moscow-Tverskaya Moscow 15095
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Kaiserhof Kaliningrad 6080
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5

@@ -1,0 +1,35 @@
+The_Shilla_Jeju Seogwipo 18639
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+The_Shilla_Seoul Seoul 13250
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Lotte_Hotel_Busan Busan 12649
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Conrad_Seoul Seoul 15769
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Hidden_Cliff_Hotel_&_Nature Seogwipo 10017
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5

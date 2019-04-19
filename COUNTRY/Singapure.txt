@@ -1,0 +1,35 @@
+Marina_Bay_Sands Singapore_Flyer 31327
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Shangri-La_Hotel_Singapore Merlion 15596
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+W_Singapore_Sentosa_Cove Sentosa 31409
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Hotel_The_Ritz_Carlton_Millenia Singapore_Flyer 26596
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
+Holiday_Inn_Singapore_Atrium Merlion 8666
+Single 0
+Twin 1
+Quad 2
+QueenBed 3
+KingBed 4
+Suite 5
