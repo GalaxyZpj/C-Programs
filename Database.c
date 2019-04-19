@@ -5,11 +5,6 @@
 #include <windows.h>
 #include <conio.h>
 
-
-void clrscr();
-void flightBooking();
-void menu();
-
 //Linked Lists for the Program
 typedef struct user {
   char username[25];
@@ -66,6 +61,50 @@ struct filenode{
   int fare ;
   struct filenode*next;
 }*headd=NULL;
+
+
+//FunctionPrototypes
+void clrscr();
+void currentTime();
+void paymentPortal(int);
+void arrorHere(int, int);
+void fileEntry();
+void sortList(HOTEL *headS);
+
+//void gotoxy(int , int);
+//void plus(int, int);
+//void minus(int, int);
+//int leapyear(int);
+//void printmonth(int, int);
+//int days(int, int);
+//int countdays(struct day, struct day);
+//int getDayNumber(int, int, int);
+//void printcalender(int, int, int, int);
+//struct day calendermain();
+
+void confirmation();
+void reserve();
+void cancel();
+void display();
+
+void hotelFinalizing(HOTEL *op);
+void hotelPrinting(char country[]);
+
+void flightBooking();
+void hotelBooking();
+void emergencyEnquiry();
+void feedback();
+void aboutUs();
+
+void menu();
+
+void fileToList();
+void createUser();
+void loginCheck(char uname[], char upass[]);
+void login();
+void userPortal();
+
+
 
 //MiscelleneousFunctions
 int position = 1; int keyPressed = 0;
@@ -608,7 +647,7 @@ void hotelPrinting(char country[]) {
     }
   }
   temp->next = NULL;
-  sortList(headH);
+  //sortList(headH);
   keyPressed = 0; position = 1;
   while(keyPressed != 13) {
     clrscr();
@@ -686,7 +725,7 @@ void flightBooking() {
       printf("\n\t  1.BOOK TICKET ");
       printf("\n\t  2.CHECK FOR ALL FLIGHTS AVAILABLE AS PER CHOICE DOMAIN");
       printf("\n\t  3.CANCEL BOOKING ");
-      printf("\n\t  4.EXIT SYSTEM");
+      printf("\n\t  4.RETURN TO MAIN MENU ");
       scanf("%d", &choice);
 
 
@@ -883,13 +922,17 @@ void loginCheck(char uname[], char upass[]) {
   while(temp != NULL) {
     if(strcmp(uname, temp->username) == 0) {
       if(strcmp(upass, temp->password) == 0) {
-        printf("Login Successful.\n");
+        printf("Login Successful.\nPress any key to continue...");
+        getch();
         menu(temp->username);
         temp = head;
         break;
       }
       else {
-        printf("Invalid Password!\n");
+        printf("Invalid Password!\nPress any key to login again.\n\n");
+        getch();
+        clrscr();
+        login();
         break;
       }
     }
@@ -899,8 +942,9 @@ void loginCheck(char uname[], char upass[]) {
   }
   if(temp == NULL) {
     printf("User not found, Consider registering first.\n");
-    printf("Enter Username and Password to register.\n");
-    createUser();
+    //printf("Enter Username and Password to register.\n");
+    userPortal();
+    //createUser();
   }
 }
 void login() {
