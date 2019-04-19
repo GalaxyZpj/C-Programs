@@ -5,6 +5,8 @@
 #include <windows.h>
 #include <conio.h>
 
+int ID_init = 16142300, hcount = 0, fcount = 0;
+
 //Linked Lists for the Program
 typedef struct user {
   char username[25];
@@ -28,9 +30,11 @@ USER *newNode, *head = 0, *temp = 0, *temp1 = 0;
 typedef struct ufile {
   char key;
   int id;
+
 }UFILE;
 UFILE *newNodef, *headf = 0, *tempf = 0, *temp1f = 0;
 
+//Hotel's
 typedef struct hotel {
   char name[50], location[50]; int avgFare, no;
   struct ROOM {
@@ -40,6 +44,16 @@ typedef struct hotel {
   struct hotel *next;
 }HOTEL;
 HOTEL *newNodeH, *headH = 0, *tempH = 0;
+
+typedef struct hbook {
+  int id;
+  char hname[50];
+  int cin_day, cin_month, cin_year;
+  int cout_day, cout_month, cout_year;
+  int amount;
+}HK;
+HK *newNodeHB, *headHB = 0, *tempHB = 0, *temp1HB = 0;
+
 
 //Flight's
 struct node {
@@ -61,6 +75,15 @@ struct filenode{
   int fare ;
   struct filenode*next;
 }*headd=NULL;
+
+typedef struct fbook {
+  int id;
+  char fname[50];
+  int cin_day, cin_month, cin_year;
+  int cout_day, cout_month, cout_year;
+  int amount;
+}FK;
+FK *newNodeFB, *headFB = 0, *tempFB = 0, *temp1FB = 0;
 
 
 //FunctionPrototypes
@@ -87,6 +110,7 @@ void reserve();
 void cancel();
 void display();
 
+void hotelRecords();
 void hotelFinalizing(HOTEL *op);
 void hotelPrinting(char country[]);
 
@@ -124,6 +148,27 @@ void currentTime() {
 
 }
 void paymentPortal(int amount) {
+  int traveliz_id, traveliz_cvv, month, year, tid; char c;
+  clrscr();
+  printf("AMOUNT: %d\n\n", amount);
+  printf("Enter the TRAVLIZ Card id: ");
+  scanf("%d", &traveliz_id);
+  printf("Enter CVV: ");
+  scanf("%d", &traveliz_cvv);
+  printf("Enter month: ");
+  scanf("%d", &month);
+  printf("Enter year: ");
+  scanf("%d", &year);
+  printf(":::CONFIRM PAYMENT:::\nPress 1 to confirm else 0 to reenter card details:-\n");
+  c = getch();
+  if(c == '1') {
+    tid = (1*69) + ID_init;
+    printf("Your transaction id is: %d", tid);
+  }
+  else {
+    paymentPortal(amount);
+  }
+
 
 }
 void arrorHere(int realPosition, int arrowPosition) {
@@ -135,7 +180,16 @@ void arrorHere(int realPosition, int arrowPosition) {
   }
 }
 void fileEntry() {
+  char tname[100];
+  char path[] = "C:\\Users\\Pranav Jain\\Documents\\Travalista\\USERS\\";
+  strcpy(tname, path);
+  strcat(tname, temp->username);
+  strcat(tname, ".txt");
 
+  FILE *fp = fopen(tname, "a");
+
+
+  fclose(fp);
 }
 void sortList(HOTEL *headS) {
     HOTEL *tempS, *tempS1;
@@ -544,6 +598,9 @@ void display() {
 
 
 //HotelBooking SubFunctions
+void hotelRecords() {
+
+}
 void hotelFinalizing(HOTEL *op) {
   clrscr();
   int choice; int fday, fmonth, fyear, tday, tmonth, tyear, days, nights, price, tprice;
@@ -587,7 +644,7 @@ void hotelFinalizing(HOTEL *op) {
 
     case 6: price = op->e[5].rfare; break;
 
-    default: printf("Invalid choice, press any key to try again."); hotelFinalizing(op);
+    default: printf("Invalid choice, press any key to try again."); getch(); hotelFinalizing(op);
   }
   printf("Choose checkin date: \n");
   d1 = calendermain();
@@ -603,7 +660,7 @@ void hotelFinalizing(HOTEL *op) {
     clrscr();
     printf("\n\n\n--Summary--\n");
     printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("NAME\t\t\t\t\t\t\tCHECKIN\t\t\t\tCHECKOUT\t\t\t\t\tFARE\n");
+    printf("NAME\t\t\t\t\t\tCHECKIN\t\t\t\tCHECKOUT\t\t\t\t\tFARE\n");
     printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     printf("%s\t\t\t%10d-%d-%d\t\t\t\t%d-%d-%d\t\t\t\t\t%d\n", op->name, d1.dd, d1.mm, d1.yy, d2.dd, d2.mm, d2.yy, tprice);
     printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
