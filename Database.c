@@ -192,6 +192,7 @@ void fileEntry() {
   fclose(fp);
 }
 void sortList(HOTEL *headS) {
+<<<<<<< HEAD
   int cnt=0;
   HOTEL *tempS1, *tempS2, *etemp,*tempS;
   tempS=tempS1=tempS2=headS;
@@ -213,6 +214,23 @@ void sortList(HOTEL *headS) {
     }
     cnt--;
     temp=temp->next;
+=======
+  HOTEL *tempS, *tempS1, *tempS2;
+  for(tempS1=headS; tempS1->next!=NULL; tempS1=tempS1->next){
+    for(tempS2=tempS1->next; tempS2!=NULL; tempS2=tempS2->next){
+      if(tempS1->avgFare > tempS2->avgFare){
+        strcpy(tempS->name,tempS1->name);
+        strcpy(tempS1->name,tempS2->name);
+        strcpy(tempS2->name,tempS->name);
+        strcpy(tempS->location,tempS1->location);
+        strcpy(tempS1->location,tempS2->location);
+        strcpy(tempS2->location,tempS->location);
+        tempS->avgFare=tempS1->avgFare;
+        tempS1->avgFare=tempS2->avgFare;
+        tempS2->avgFare=tempS->avgFare;
+      }
+    }
+>>>>>>> a8619a4526233f69860f7a9ca81cedf03b35c5dd
   }
 }
 
@@ -870,6 +888,7 @@ void feedback() {
 
 }
 void aboutUs() {
+<<<<<<< HEAD
   clrscr();
   printf("_______________\n");
   printf("BATCH   A2\nBRANCH   ECE\n");
@@ -884,6 +903,23 @@ void aboutUs() {
   printf("_________________________________________________\n");
   printf("SATYAM RAJPOOT\t\t\t\t18102234\n");
   printf("_________________________________________________\n");
+=======
+ clrscr();
+ printf("_______________\n");
+ printf("BATCH   A2\nBRANCH   ECE\n");
+ printf("_______________\n");
+ printf("\nMADE BY\n");
+ printf("\n\nNAME\t\t\t\tENROLLMENT NUMBER\n");
+ printf("_________________________________________________\n");
+ printf("ISHIKA SHARMA\t\t\t\t18102034\n" );
+ printf("_________________________________________________\n");
+ printf("KHUSHI SRIVASTAVA\t\t\t18102035\n" );
+ printf("_________________________________________________\n");
+ printf("KHUSHI\t\t\t\t18102039\n" );
+ printf("_________________________________________________\n");
+ printf("SATYAM RAJPOOT\t\t\t\t18102234\n");
+ printf("_________________________________________________\n");
+>>>>>>> a8619a4526233f69860f7a9ca81cedf03b35c5dd
 }
 
 
