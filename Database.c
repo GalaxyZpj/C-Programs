@@ -191,15 +191,20 @@ void arrorHere(int realPosition, int arrowPosition) {
   }
 }
 void fileEntry() {
+  tempf = headf;
   char tname[100];
   char path[] = "C:\\Users\\Pranav Jain\\Documents\\Travalista\\USERS\\";
   strcpy(tname, path);
   strcat(tname, temp->username);
   strcat(tname, ".txt");
-
-  FILE *fp = fopen(tname, "a");
-
-
+  FILE *fp = fopen(tname, "w");
+  while(tempf != NULL) {
+    fprintf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", tempf->key, tempf->id, tempf->name, tempf->cin_day, tempf->cin_month, tempf->cin_year, tempf->cout_day, tempf->cout_month, tempf->cout_year, tempf->amount);
+    tempf = tempf->next;
+  }
+  printf("Entry Successful!!!\n\nPress any key to return to main menu.");
+  getch();
+  menu(temp->username);
   fclose(fp);
 }
 void sortList(HOTEL *headS) {
@@ -440,6 +445,7 @@ struct day calendermain(){
 void flightRecords(int amount, int tid) {
   newNodeFK = (FK *)malloc(sizeof(FK));
   newNodef = (UFILE *)malloc(sizeof(UFILE));
+  newNodeFK->key = newNodef->key = 'f';
   newNodeFK->id  = newNodef->id = tid;
   //newNodeFK->name = newNodef->name = tempH1->name;
   newNodeFK->cin_day  = newNodef->cin_day = d1.dd;
@@ -469,7 +475,7 @@ void flightRecords(int amount, int tid) {
   tempf->next = NULL;
   clrscr();
   //printf("\n:::BOOKING DETAILS:::\n");
-
+  fileEntry();
 
 }
 void confirmation() { int flno;
@@ -644,6 +650,7 @@ void display() {
 void hotelRecords(int amount, int tid) {
   newNodeHK = (HK *)malloc(sizeof(HK));
   newNodef = (UFILE *)malloc(sizeof(UFILE));
+  newNodeHK->key = newNodef->key = 'h';
   newNodeHK->id  = newNodef->id = tid;
   //newNodeHK->name = newNodef->name = tempH1->name;
   newNodeHK->cin_day  = newNodef->cin_day = d1.dd;
@@ -673,7 +680,7 @@ void hotelRecords(int amount, int tid) {
   tempf->next = NULL;
   clrscr();
   //printf("\n:::BOOKING DETAILS:::\n");
-
+  fileEntry();
 
 }
 void hotelFinalizing(HOTEL *op) {
@@ -874,7 +881,7 @@ void flightBooking() {
           break;
       case 2: display();
           break;
-      case 4: menu();
+      case 4: menu(temp->username);
           break;
       default:
           printf("\nInvalid Choice");
