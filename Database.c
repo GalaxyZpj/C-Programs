@@ -1,5 +1,4 @@
 #include <stdio.h>
-//khushi
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
