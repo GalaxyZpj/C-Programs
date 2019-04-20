@@ -30,7 +30,11 @@ USER *newNode, *head = 0, *temp = 0, *temp1 = 0;
 typedef struct ufile {
   char key;
   int id;
-
+  char name[50];
+  int cin_day, cin_month, cin_year;
+  int cout_day, cout_month, cout_year;
+  int amount;
+  struct ufile *next;
 }UFILE;
 UFILE *newNodef, *headf = 0, *tempf = 0, *temp1f = 0;
 
@@ -43,16 +47,18 @@ typedef struct hotel {
   }e[6];
   struct hotel *next;
 }HOTEL;
-HOTEL *newNodeH, *headH = 0, *tempH = 0;
+HOTEL *newNodeH, *headH = 0, *tempH = 0, *tempH1 = 0;
 
 typedef struct hbook {
+  char key;
   int id;
-  char hname[50];
+  char name[50];
   int cin_day, cin_month, cin_year;
   int cout_day, cout_month, cout_year;
   int amount;
+  struct hbook *next;
 }HK;
-HK *newNodeHB, *headHB = 0, *tempHB = 0, *temp1HB = 0;
+HK *newNodeHK, *headHK = 0, *tempHK = 0, *temp1HK = 0;
 
 
 //Flight's
@@ -77,13 +83,15 @@ struct filenode{
 }*headd=NULL;
 
 typedef struct fbook {
+  char key;
   int id;
-  char fname[50];
+  char name[50];
   int cin_day, cin_month, cin_year;
   int cout_day, cout_month, cout_year;
   int amount;
+  struct fbook *next;
 }FK;
-FK *newNodeFB, *headFB = 0, *tempFB = 0, *temp1FB = 0;
+FK *newNodeFK, *headFK = 0, *tempFK = 0, *temp1FK = 0;
 
 
 //FunctionPrototypes
@@ -105,12 +113,13 @@ void sortList(HOTEL *headS);
 //void printcalender(int, int, int, int);
 //struct day calendermain();
 
+void flightRecords(int amount, int tid);
 void confirmation();
 void reserve();
 void cancel();
 void display();
 
-void hotelRecords();
+void hotelRecords(int amount, int tid);
 void hotelFinalizing(HOTEL *op);
 void hotelPrinting(char country[]);
 
@@ -163,7 +172,9 @@ void paymentPortal(int amount) {
   c = getch();
   if(c == '1') {
     tid = (1*69) + ID_init;
-    printf("Your transaction id is: %d", tid);
+    printf("Your transaction id is: %d\n\nPress any key to display booking details\n", tid);
+    getch();
+    hotelRecords(amount, tid);
   }
   else {
     paymentPortal(amount);
@@ -180,41 +191,23 @@ void arrorHere(int realPosition, int arrowPosition) {
   }
 }
 void fileEntry() {
+  tempf = headf;
   char tname[100];
   char path[] = "C:\\Users\\KHUSHI\\Documents\\Travalista\\USERS\\";
   strcpy(tname, path);
   strcat(tname, temp->username);
   strcat(tname, ".txt");
-
-  FILE *fp = fopen(tname, "a");
-
-
+  FILE *fp = fopen(tname, "w");
+  while(tempf != NULL) {
+    fprintf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", tempf->key, tempf->id, tempf->name, tempf->cin_day, tempf->cin_month, tempf->cin_year, tempf->cout_day, tempf->cout_month, tempf->cout_year, tempf->amount);
+    tempf = tempf->next;
+  }
+  printf("Entry Successful!!!\n\nPress any key to return to main menu.");
+  getch();
+  menu(temp->username);
   fclose(fp);
 }
 void sortList(HOTEL *headS) {
-<<<<<<< HEAD
-  int cnt=0;
-  HOTEL *tempS1, *tempS2, *etemp,*tempS;
-  tempS=tempS1=tempS2=headS;
-  while(tempS!=NULL){
-      cnt++;
-      tempS=tempS->next;
-  }
-  while(cnt!=0 && tempS!=NULL){
-    tempS1=tempS->next;
-    tempS2=tempS1->next;
-    while(tempS2!=NULL){
-      if(tempS1->avgFare < tempS2->avgFare){
-        etemp=tempS2;
-        tempS2=tempS1;
-        tempS1=etemp;
-      }
-      tempS2=tempS2->next;
-      tempS1=tempS1->next;
-    }
-    cnt--;
-    temp=temp->next;
-=======
   HOTEL *tempS, *tempS1, *tempS2;
   for(tempS1=headS; tempS1->next!=NULL; tempS1=tempS1->next){
     for(tempS2=tempS1->next; tempS2!=NULL; tempS2=tempS2->next){
@@ -230,7 +223,6 @@ void sortList(HOTEL *headS) {
         tempS2->avgFare=tempS->avgFare;
       }
     }
->>>>>>> a8619a4526233f69860f7a9ca81cedf03b35c5dd
   }
 }
 
@@ -456,6 +448,42 @@ struct day calendermain(){
 }
 
 //FlightBooking SubFunctions
+void flightRecords(int amount, int tid) {
+  newNodeFK = (FK *)malloc(sizeof(FK));
+  newNodef = (UFILE *)malloc(sizeof(UFILE));
+  newNodeFK->key = newNodef->key = 'f';
+  newNodeFK->id  = newNodef->id = tid;
+  //newNodeFK->name = newNodef->name = tempH1->name;
+  newNodeFK->cin_day  = newNodef->cin_day = d1.dd;
+  newNodeFK->cin_month  = newNodef->cin_month = d1.mm;
+  newNodeFK->cin_year  = newNodef->cin_year  = d1.yy;
+  newNodeFK->cout_day  = newNodef->cout_day  = d2.dd;
+  newNodeFK->cout_month  = newNodef->cout_month = d2.mm;
+  newNodeFK->cout_year  = newNodef->cout_year  = d2.yy;
+  newNodeFK->amount  = newNodef->amount  = amount;
+
+  if(headFK != 0) {
+    tempFK->next = newNodeFK;
+    tempFK = newNodeFK;
+  }
+  else {
+    headFK = tempFK = newNodeFK;
+  }
+  tempFK->next = NULL;
+
+  if(headf != 0) {
+    tempf->next = newNodef;
+    tempf = newNodef;
+  }
+  else {
+    headf = tempf = newNodef;
+  }
+  tempf->next = NULL;
+  clrscr();
+  //printf("\n:::BOOKING DETAILS:::\n");
+  fileEntry();
+
+}
 void confirmation() { int flno;
     int payout;
     printf("Choose the desired flight from the list \n");
@@ -625,7 +653,40 @@ void display() {
 
 
 //HotelBooking SubFunctions
-void hotelRecords() {
+void hotelRecords(int amount, int tid) {
+  newNodeHK = (HK *)malloc(sizeof(HK));
+  newNodef = (UFILE *)malloc(sizeof(UFILE));
+  newNodeHK->key = newNodef->key = 'h';
+  newNodeHK->id  = newNodef->id = tid;
+  //newNodeHK->name = newNodef->name = tempH1->name;
+  newNodeHK->cin_day  = newNodef->cin_day = d1.dd;
+  newNodeHK->cin_month  = newNodef->cin_month = d1.mm;
+  newNodeHK->cin_year  = newNodef->cin_year  = d1.yy;
+  newNodeHK->cout_day  = newNodef->cout_day  = d2.dd;
+  newNodeHK->cout_month  = newNodef->cout_month = d2.mm;
+  newNodeHK->cout_year  = newNodef->cout_year  = d2.yy;
+  newNodeHK->amount  = newNodef->amount  = amount;
+
+  if(headHK != 0) {
+    tempHK->next = newNodeHK;
+    tempHK = newNodeHK;
+  }
+  else {
+    headHK = tempHK = newNodeHK;
+  }
+  tempHK->next = NULL;
+
+  if(headf != 0) {
+    tempf->next = newNodef;
+    tempf = newNodef;
+  }
+  else {
+    headf = tempf = newNodef;
+  }
+  tempf->next = NULL;
+  clrscr();
+  //printf("\n:::BOOKING DETAILS:::\n");
+  fileEntry();
 
 }
 void hotelFinalizing(HOTEL *op) {
@@ -768,23 +829,28 @@ void hotelPrinting(char country[]) {
   }
   switch(position) {
     case 1:
-    hotelFinalizing(headH);
+    tempH1 = headH;
+    hotelFinalizing(tempH1);
     break;
 
     case 2:
-    hotelFinalizing(headH->next);
+    tempH1 = headH->next;
+    hotelFinalizing(tempH1);
     break;
 
     case 3:
-    hotelFinalizing(headH->next->next);
+    tempH1 = headH->next->next;
+    hotelFinalizing(tempH1);
     break;
 
     case 4:
-    hotelFinalizing(headH->next->next->next);
+    tempH1 = headH->next->next->next;
+    hotelFinalizing(tempH1);
     break;
 
     case 5:
-    hotelFinalizing(headH->next->next->next->next);
+    tempH1 = headH->next->next->next->next;
+    hotelFinalizing(tempH1);
     break;
 
     default:
@@ -821,7 +887,7 @@ void flightBooking() {
           break;
       case 2: display();
           break;
-      case 4: menu();
+      case 4: menu(temp->username);
           break;
       default:
           printf("\nInvalid Choice");
@@ -888,22 +954,6 @@ void feedback() {
 
 }
 void aboutUs() {
-<<<<<<< HEAD
-  clrscr();
-  printf("_______________\n");
-  printf("BATCH   A2\nBRANCH   ECE\n");
-  printf("_______________\n");
-  printf("\n\nNAME\t\t\t\tENROLLMENT NUMBER\n");
-  printf("_________________________________________________\n");
-  printf("ISHIKA SHARMA\t\t\t\t18102034\n" );
-  printf("_________________________________________________\n");
-  printf("KHUSHI SRIVASTAVA\t\t\t18102035\n" );
-  printf("_________________________________________________\n");
-  printf("PRANAV JAIN\t\t\t\t18102039\n" );
-  printf("_________________________________________________\n");
-  printf("SATYAM RAJPOOT\t\t\t\t18102234\n");
-  printf("_________________________________________________\n");
-=======
  clrscr();
  printf("_______________\n");
  printf("BATCH   A2\nBRANCH   ECE\n");
@@ -919,7 +969,7 @@ void aboutUs() {
  printf("_________________________________________________\n");
  printf("SATYAM RAJPOOT\t\t\t\t18102234\n");
  printf("_________________________________________________\n");
->>>>>>> a8619a4526233f69860f7a9ca81cedf03b35c5dd
+
 }
 
 
@@ -1037,8 +1087,6 @@ void loginCheck(char uname[], char upass[]) {
   while(temp != NULL) {
     if(strcmp(uname, temp->username) == 0) {
       if(strcmp(upass, temp->password) == 0) {
-        printf("Login Successful.\nPress any key to continue...");
-        getch();
         menu(temp->username);
         temp = head;
         break;
