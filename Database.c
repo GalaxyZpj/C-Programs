@@ -192,14 +192,14 @@ void fileEntry() {
   fclose(fp);
 }
 void sortList(HOTEL *headS) {
-    HOTEL *tempS, *tempS1;
-    tempS=headS;
-    while(tempS!=NULL) {
-      tempS1=tempS->next;
-      if(tempS->avgFare >tempS1->avgFare){
-        int t=tempS->avgFare;
-        tempS->avgFare=tempS1->avgFare;
-        tempS1->avgFare=t;
+    HOTEL *tempS, *tempS1, *etemp;
+    for(tempS = headS; tempS != NULL; tempS = tempS->next) {
+      for(tempS1 = tempS->next; (tempS1 != NULL) || (tempS != NULL); tempS1 = tempS1->next) {
+        if(tempS->avgFare > tempS1->avgFare) {
+          etemp = tempS->next;
+          tempS->next = tempS1->next;
+          tempS1->next = etemp;
+        }
       }
    }
 }
@@ -701,7 +701,7 @@ void hotelPrinting(char country[]) {
     }
   }
   temp->next = NULL;
-  //sortList(headH);
+  sortList(headH);
   keyPressed = 0; position = 1;
   while(keyPressed != 13) {
     clrscr();
