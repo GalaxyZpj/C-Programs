@@ -1,4 +1,5 @@
 #include <stdio.h>
+//khushi
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -196,15 +197,12 @@ void sortList(HOTEL *headS) {
     tempS=headS;
     while(tempS!=NULL) {
       tempS1=tempS->next;
-      while(tempS1!=NULL){
-        if(tempS->avgFare > tempS1->avgFare){
-          tempS->next=tempS1->next;
-          tempS1->next=tempS;
-          tempS=tempS->next;
+      if(tempS->avgFare >tempS1->avgFare){
+        int t=tempS->avgFare;
+        tempS->avgFare=tempS1->avgFare;
+        tempS1->avgFare=t;
       }
-    }
-    tempS1=tempS1->next;
-    }
+   }
 }
 
 
