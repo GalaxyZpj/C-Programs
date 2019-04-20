@@ -208,16 +208,22 @@ void fileEntry() {
   fclose(fp);
 }
 void sortList(HOTEL *headS) {
-    HOTEL *tempS, *tempS1, *etemp;
-    for(tempS = headS; tempS != NULL; tempS = tempS->next) {
-      for(tempS1 = tempS->next; (tempS1 != NULL) && (tempS != NULL); tempS1 = tempS1->next) {
-        if(tempS->avgFare < tempS1->avgFare) {
-          etemp = tempS->next;
-          tempS->next = tempS1->next;
-          tempS1->next = etemp;
-        }
+  HOTEL *tempS, *tempS1, *tempS2;
+  for(tempS1=headS; tempS1->next!=NULL; tempS1=tempS1->next){
+    for(tempS2=tempS1->next; tempS2!=NULL; tempS2=tempS2->next){
+      if(tempS1->avgFare > tempS2->avgFare){
+        strcpy(tempS->name,tempS1->name);
+        strcpy(tempS1->name,tempS2->name);
+        strcpy(tempS2->name,tempS->name);
+        strcpy(tempS->location,tempS1->location);
+        strcpy(tempS1->location,tempS2->location);
+        strcpy(tempS2->location,tempS->location);
+        tempS->avgFare=tempS1->avgFare;
+        tempS1->avgFare=tempS2->avgFare;
+        tempS2->avgFare=tempS->avgFare;
       }
-   }
+    }
+  }
 }
 
 
@@ -786,7 +792,7 @@ void hotelPrinting(char country[]) {
     }
   }
   temp->next = NULL;
-  sortList(headH);
+  //sortList(headH);
   keyPressed = 0; position = 1;
   while(keyPressed != 13) {
     clrscr();
@@ -948,6 +954,21 @@ void feedback() {
 
 }
 void aboutUs() {
+ clrscr();
+ printf("_______________\n");
+ printf("BATCH   A2\nBRANCH   ECE\n");
+ printf("_______________\n");
+ printf("\nMADE BY\n");
+ printf("\n\nNAME\t\t\t\tENROLLMENT NUMBER\n");
+ printf("_________________________________________________\n");
+ printf("ISHIKA SHARMA\t\t\t\t18102034\n" );
+ printf("_________________________________________________\n");
+ printf("KHUSHI SRIVASTAVA\t\t\t18102035\n" );
+ printf("_________________________________________________\n");
+ printf("PRANAV JAIN\t\t\t\t18102039\n" );
+ printf("_________________________________________________\n");
+ printf("SATYAM RAJPOOT\t\t\t\t18102234\n");
+ printf("_________________________________________________\n");
 
 }
 
