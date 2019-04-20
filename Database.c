@@ -194,8 +194,8 @@ void fileEntry() {
 void sortList(HOTEL *headS) {
     HOTEL *tempS, *tempS1, *etemp;
     for(tempS = headS; tempS != NULL; tempS = tempS->next) {
-      for(tempS1 = tempS->next; (tempS1 != NULL) || (tempS != NULL); tempS1 = tempS1->next) {
-        if(tempS->avgFare > tempS1->avgFare) {
+      for(tempS1 = tempS->next; (tempS1 != NULL) && (tempS != NULL); tempS1 = tempS1->next) {
+        if(tempS->avgFare < tempS1->avgFare) {
           etemp = tempS->next;
           tempS->next = tempS1->next;
           tempS1->next = etemp;
