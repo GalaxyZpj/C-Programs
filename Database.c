@@ -123,6 +123,7 @@ void display();
 void hotelRecords(int amount, int tid);
 void hotelFinalizing(HOTEL *op);
 void hotelPrinting(char country[]);
+void displayPreviousRecords(HK *headHK, HK*tempHK);
 
 void flightBooking();
 void hotelBooking();
@@ -929,6 +930,21 @@ void hotelPrinting(char country[]) {
     hotelPrinting(country);
   }
   getch();
+}
+void displayPreviousRecords(HK *headHK, HK*tempHK){
+  if(headHK==0){
+    printf("NO PREVIOUS RECORDS...\n");
+  }
+  else{
+    tempHK=headHK;
+    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("Traviliz Card ID\t\t\t\t\tHOTEL NAME\t\t\t\t  CHECK IN DATE  \t\t\t\t  CHECK OUT DATE  \t\t\t\t  AMOUNT\n");
+    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    while(tempHK!=0){
+      printf("%30d\t\t\t\t\t%45s\t\t\t  %d-%d-%d  \t\t\t\t  %d-%d-%d  \t\t\t\t  %d\n",tempHK->id, tempHK->name, tempHK->cin_day, tempHK->cin_month, tempHK->cin_year, tempHK->cout_day, tempHK->cout_month, tempHK->cout_year, tempHK->amount );
+      tempHK=tempHK->next;
+    }
+  }
 }
 
 //TravalistaCoreFunctions
