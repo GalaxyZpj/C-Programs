@@ -100,6 +100,7 @@ void currentTime();
 void paymentPortal(int);
 void arrorHere(int, int);
 void fileEntry();
+void fileRetrive();
 void sortList(HOTEL *headS);
 
 //void gotoxy(int , int);
@@ -122,6 +123,7 @@ void display();
 void hotelRecords(int amount, int tid);
 void hotelFinalizing(HOTEL *op);
 void hotelPrinting(char country[]);
+void displayPreviousRecords(HK *headHK, HK*tempHK);
 
 void flightBooking();
 void hotelBooking();
@@ -197,7 +199,7 @@ void fileEntry() {
   strcpy(tname, path);
   strcat(tname, temp->username);
   strcat(tname, ".txt");
-  FILE *fp = fopen(tname, "w");
+  FILE *fp = fopen(tname, "a+");
   while(tempf != NULL) {
     fprintf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", tempf->key, tempf->id, tempf->name, tempf->cin_day, tempf->cin_month, tempf->cin_year, tempf->cout_day, tempf->cout_month, tempf->cout_year, tempf->amount);
     tempf = tempf->next;
@@ -206,6 +208,73 @@ void fileEntry() {
   getch();
   menu(temp->username);
   fclose(fp);
+}
+void fileRetrive() {
+  char tname[100];
+  char path[] = "./Source Files/USERS\\";
+  strcpy(tname, path);
+  strcat(tname, temp->username);
+  strcat(tname, ".txt");
+  FILE *fp = fopen(tname, "r");
+  while(!feof(fp)) {
+    newNodef = (UFILE *)malloc(sizeof(UFILE));
+    fscanf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", newNodef->key, &newNodef->id, newNodef->name, &newNodef->cin_day, &newNodef->cin_month, &newNodef->cin_year, &newNodef->cout_day, &newNodef->cout_month, &newNodef->cout_year, &newNodef->amount);
+    if(headf != 0) {
+      tempf->next = newNodef;
+      tempf = newNodef;
+    }
+    else {
+      headf = tempf = newNodef;
+    }
+  }
+  tempf->next = NULL;
+  fclose(fp);
+
+  tempf = headf;
+  while(tempf != NULL) {
+    if(tempf->key == 'h') {
+      newNodeHK = (HK *)malloc(sizeof(HK));
+      newNodeHK->key = tempf->key;
+      newNodeHK->id  = tempf->id;
+      strcpy(newNodeHK->name, tempf->name);
+      newNodeHK->cin_day  = tempf->cin_day;
+      newNodeHK->cin_month  = tempf->cin_month;
+      newNodeHK->cin_year  = tempf->cin_year;
+      newNodeHK->cout_day  = tempf->cout_day;
+      newNodeHK->cout_month  = tempf->cout_month;
+      newNodeHK->cout_year  = tempf->cout_year;
+      newNodeHK->amount  = tempf->amount;
+      if(headHK != 0) {
+        tempHK->next = newNodeHK;
+        tempHK = newNodeHK;
+      }
+      else {
+        headHK = tempHK = newNodeHK;
+      }
+    } else {
+      newNodeFK = (FK *)malloc(sizeof(FK));
+      newNodeFK->key = tempf->key;
+      newNodeFK->id  = tempf->id;
+      strcpy(newNodeFK->name, tempf->name);
+      newNodeFK->cin_day  = tempf->cin_day;
+      newNodeFK->cin_month  = tempf->cin_month;
+      newNodeFK->cin_year  = tempf->cin_year;
+      newNodeFK->cout_day  = tempf->cout_day;
+      newNodeFK->cout_month  = tempf->cout_month;
+      newNodeFK->cout_year  = tempf->cout_year;
+      newNodeFK->amount  = tempf->amount;
+      if(headFK != 0) {
+        tempFK->next = newNodeFK;
+        tempFK = newNodeFK;
+      }
+      else {
+        headFK = tempFK = newNodeFK;
+      }
+    }
+    tempf = tempf->next;
+  }
+  tempHK->next = NULL;
+  tempFK->next = NULL;
 }
 void sortList(HOTEL *headS) {
   HOTEL *tempS, *tempS1, *tempS2;
@@ -453,7 +522,8 @@ void flightRecords(int amount, int tid) {
   newNodef = (UFILE *)malloc(sizeof(UFILE));
   newNodeFK->key = newNodef->key = 'f';
   newNodeFK->id  = newNodef->id = tid;
-  //newNodeFK->name = newNodef->name = tempH1->name;
+  strcpy(newNodeFK->name, tempH1->name);
+  strcpy(newNodef->name, tempH1->name);
   newNodeFK->cin_day  = newNodef->cin_day = d1.dd;
   newNodeFK->cin_month  = newNodef->cin_month = d1.mm;
   newNodeFK->cin_year  = newNodef->cin_year  = d1.yy;
@@ -658,7 +728,8 @@ void hotelRecords(int amount, int tid) {
   newNodef = (UFILE *)malloc(sizeof(UFILE));
   newNodeHK->key = newNodef->key = 'h';
   newNodeHK->id  = newNodef->id = tid;
-  //newNodeHK->name = newNodef->name = tempH1->name;
+  strcpy(newNodeHK->name, tempH1->name);
+  strcpy(newNodef->name, tempH1->name);
   newNodeHK->cin_day  = newNodef->cin_day = d1.dd;
   newNodeHK->cin_month  = newNodef->cin_month = d1.mm;
   newNodeHK->cin_year  = newNodef->cin_year  = d1.yy;
@@ -860,6 +931,21 @@ void hotelPrinting(char country[]) {
   }
   getch();
 }
+void displayPreviousRecords(HK *headHK, HK*tempHK){
+  if(headHK==0){
+    printf("NO PREVIOUS RECORDS...\n");
+  }
+  else{
+    tempHK=headHK;
+    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("Traviliz Card ID\t\t\t\t\tHOTEL NAME\t\t\t\t  CHECK IN DATE  \t\t\t\t  CHECK OUT DATE  \t\t\t\t  AMOUNT\n");
+    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    while(tempHK!=0){
+      printf("%30d\t\t\t\t\t%45s\t\t\t  %d-%d-%d  \t\t\t\t  %d-%d-%d  \t\t\t\t  %d\n",tempHK->id, tempHK->name, tempHK->cin_day, tempHK->cin_month, tempHK->cin_year, tempHK->cout_day, tempHK->cout_month, tempHK->cout_year, tempHK->amount );
+      tempHK=tempHK->next;
+    }
+  }
+}
 
 //TravalistaCoreFunctions
 void flightBooking() {
@@ -1034,7 +1120,6 @@ void fileToList() {
      }
   }
   temp->next = NULL;
-
   fclose(fp);
 }
 void createUser() {
