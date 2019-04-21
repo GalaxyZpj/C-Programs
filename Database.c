@@ -215,10 +215,10 @@ void fileRetrive() {
   strcpy(tname, path);
   strcat(tname, temp->username);
   strcat(tname, ".txt");
-  FILE *fp = fopen(tname, "r+");
+  FILE *fp = fopen(tname, "r");
   while(!feof(fp)) {
     newNodef = (UFILE *)malloc(sizeof(UFILE));
-    //fscanf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", newNodef->key, &newNodef->id, newNodef->name, &newNodef->cin_day, &newNodef->cin_month, &newNodef->cin_year, &newNodef->cout_day, &newNodef->cout_month, &newNodef->cout_year, &newNodef->amount);
+    fscanf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", &newNodef->key, &newNodef->id, newNodef->name, &newNodef->cin_day, &newNodef->cin_month, &newNodef->cin_year, &newNodef->cout_day, &newNodef->cout_month, &newNodef->cout_year, &newNodef->amount);
     if(headf != 0) {
       tempf->next = newNodef;
       tempf = newNodef;
@@ -229,7 +229,6 @@ void fileRetrive() {
   }
   tempf->next = NULL;
   fclose(fp);
-
   tempf = headf;
   while(tempf != NULL) {
     if(tempf->key == 'h') {
@@ -251,7 +250,7 @@ void fileRetrive() {
       else {
         headHK = tempHK = newNodeHK;
       }
-    } else {
+    } if(tempf->key == 'f') {
       newNodeFK = (FK *)malloc(sizeof(FK));
       newNodeFK->key = tempf->key;
       newNodeFK->id  = tempf->id;
@@ -273,8 +272,11 @@ void fileRetrive() {
     }
     tempf = tempf->next;
   }
-  tempHK->next = NULL;
-  tempFK->next = NULL;
+  if(tempHK != 0)
+    tempHK->next = NULL;
+  if(tempFK != 0)
+    tempFK->next = NULL;
+
 }
 void sortList(HOTEL *headS) {
   HOTEL *tempS, *tempS1, *tempS2;
