@@ -215,10 +215,10 @@ void fileRetrive() {
   strcpy(tname, path);
   strcat(tname, temp->username);
   strcat(tname, ".txt");
-  FILE *fp = fopen(tname, "r");
+  FILE *fp = fopen(tname, "r+");
   while(!feof(fp)) {
     newNodef = (UFILE *)malloc(sizeof(UFILE));
-    fscanf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", newNodef->key, &newNodef->id, newNodef->name, &newNodef->cin_day, &newNodef->cin_month, &newNodef->cin_year, &newNodef->cout_day, &newNodef->cout_month, &newNodef->cout_year, &newNodef->amount);
+    //fscanf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", newNodef->key, &newNodef->id, newNodef->name, &newNodef->cin_day, &newNodef->cin_month, &newNodef->cin_year, &newNodef->cout_day, &newNodef->cout_month, &newNodef->cout_year, &newNodef->amount);
     if(headf != 0) {
       tempf->next = newNodef;
       tempf = newNodef;
@@ -938,7 +938,7 @@ void displayPreviousRecords(HK *headHK, HK*tempHK){
   else{
     tempHK=headHK;
     printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("Traviliz Card ID\t\t\t\t\tHOTEL NAME\t\t\t\t  CHECK IN DATE  \t\t\t\t  CHECK OUT DATE  \t\t\t\t  AMOUNT\n");
+    printf("Transaction ID\t\t\t\t\tHOTEL NAME\t\t\t\t  CHECK IN DATE  \t\t\t\t  CHECK OUT DATE  \t\t\t\t  AMOUNT\n");
     printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     while(tempHK!=0){
       printf("%30d\t\t\t\t\t%45s\t\t\t  %d-%d-%d  \t\t\t\t  %d-%d-%d  \t\t\t\t  %d\n",tempHK->id, tempHK->name, tempHK->cin_day, tempHK->cin_month, tempHK->cin_year, tempHK->cout_day, tempHK->cout_month, tempHK->cout_year, tempHK->amount );
@@ -1061,6 +1061,7 @@ void aboutUs() {
 
 //MainMenuFunction
 void menu(char mname[]) {
+  fileRetrive();
   position = 1; keyPressed = 0;
   clrscr();
   while(keyPressed != 13) {
@@ -1074,9 +1075,10 @@ void menu(char mname[]) {
     arrorHere(3, position); printf("3. Emergency Enquiry\n");
     arrorHere(4, position); printf("4. Feedback\n");
     arrorHere(5, position); printf("5. About us\n");
+    arrorHere(6, position); printf("6. Previous Records\n");
     keyPressed = getch();
 
-    if(keyPressed == 80 && position != 5) {
+    if(keyPressed == 80 && position != 6) {
       position++;
     }else if(keyPressed == 72 && position != 1) {
       position--;
@@ -1094,6 +1096,8 @@ void menu(char mname[]) {
     case 4: feedback(); break;
 
     case 5: aboutUs(); break;
+
+    case 6: displayPreviousRecords(headHK, tempHK); break;
 
     default: printf("Invalid Choice, Press any key to try again.\n"); getchar(); menu(mname);
   }
