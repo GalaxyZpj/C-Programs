@@ -193,7 +193,7 @@ void arrorHere(int realPosition, int arrowPosition) {
 void fileEntry() {
   tempf = headf;
   char tname[100];
-  char path[] = "C:\\Users\\KHUSHI\\Documents\\Travalista\\USERS\\";
+  char path[] = "./USERS\\";
   strcpy(tname, path);
   strcat(tname, temp->username);
   strcat(tname, ".txt");
@@ -560,12 +560,12 @@ ptr=(struct node*)malloc(sizeof(struct node));
 
   //printing individual ticket details for each new noode -> each time new record in ticket.txt
   FILE*f;
-  f=fopen("C:\\Users\\KHUSHI\\Documents\\Travalista\\FLIGHT FILES\\ticket.txt","w");
+  f=fopen("./FLIGHT FILES\\ticket.txt","w");
   fprintf(f,"NAME:%s\nMOBILE_NO%s\nCLASS%s\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
   fclose(f);
 //printing all details of everyone to a record book ALL_RECORDS ->appending data
 FILE*fp;
-fp=fopen("C:\\Users\\KHUSHI\\Documents\\Travalista\\FLIGHT FILES\\allrecords.txt","a");
+fp=fopen("./FLIGHT FILES\\allrecords.txt","a");
 struct node*temp;
 temp=(struct node*)malloc(sizeof(struct node));
 temp=headi;
@@ -617,7 +617,7 @@ void display() {
     printf("*********************************************");
     system("cls");
     FILE *f;
-    f=fopen("C:\\Users\\KHUSHI\\Documents\\Travalista\\FLIGHT FILES\\Flights.txt","r");
+    f=fopen("./FLIGHT FILES\\Flights.txt","r");
 
     //copying the content of file to structure nodes
     while(!feof(f))
@@ -772,7 +772,7 @@ void hotelFinalizing(HOTEL *op) {
 }
 void hotelPrinting(char country[]) {
   clrscr();
-  char path[100] = "C:\\Users\\KHUSHI\\Documents\\Travalista\\COUNTRY\\"; int choice;
+  char path[100] = "./COUNTRY\\"; int choice;
   strcat(path, country);
   strcat(path, ".txt");
   FILE *fp = fopen(path, "r+");
@@ -792,7 +792,7 @@ void hotelPrinting(char country[]) {
     }
   }
   temp->next = NULL;
-  sortList(headH);
+  //sortList(headH);
   keyPressed = 0; position = 1;
   while(keyPressed != 13) {
     clrscr();
@@ -965,7 +965,7 @@ void aboutUs() {
  printf("_________________________________________________\n");
  printf("KHUSHI SRIVASTAVA\t\t\t18102035\n" );
  printf("_________________________________________________\n");
- printf("KHUSHI\t\t\t\t18102039\n" );
+ printf("PRANAV JAIN\t\t\t\t18102039\n" );
  printf("_________________________________________________\n");
  printf("SATYAM RAJPOOT\t\t\t\t18102234\n");
  printf("_________________________________________________\n");
@@ -1020,7 +1020,7 @@ void menu(char mname[]) {
 void fileToList() {
   clrscr();
   printf("LOADING DATABASE......\n");
-  FILE *fp = fopen("C:\\Users\\KHUSHI\\Documents\\Travalista\\Database.txt", "r");
+  FILE *fp = fopen("./Database.txt", "r");
   while(!feof(fp)) {
     newNode = (USER *)malloc(sizeof(USER));
     fscanf(fp, "%s %s %s %s %d %d %d %s %s %s\n", newNode->username, newNode->password, newNode->ed.fName, newNode->ed.lName,
@@ -1065,7 +1065,7 @@ void createUser() {
     head = temp = newNode;
   }
   temp->next = NULL;
-  FILE *fp = fopen("C:\\Users\\KHUSHI\\Documents\\Travalista\\Database.txt", "a");
+  FILE *fp = fopen("./Database.txt", "a");
   fprintf(fp,"%s %s %s %s %d %d %d %s %s %s\n", temp->username, temp->password, temp->ed.fName, temp->ed.lName,
    temp->ed.eb.day, temp->ed.eb.month, temp->ed.eb.year, temp->ed.contact, temp->ed.state, temp->ed.city);
   printf("\nUser registered successfully.\n");
@@ -1073,7 +1073,7 @@ void createUser() {
 
   //File for the user created
   char tname[100];
-  char path[] = "C:\\Users\\KHUSHI\\Documents\\Travalista\\USERS\\";
+  char path[] = "./USERS\\";
   strcpy(tname, path);
   strcat(tname, temp->username);
   strcat(tname, ".txt");
