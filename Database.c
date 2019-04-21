@@ -276,7 +276,6 @@ void fileRetrive() {
     tempHK->next = NULL;
   if(tempFK != 0)
     tempFK->next = NULL;
-
 }
 void sortList(HOTEL *headS) {
   HOTEL *tempS, *tempS1, *tempS2;
@@ -765,7 +764,6 @@ void hotelRecords(int amount, int tid) {
   newNodeHK->cout_month  = newNodef->cout_month = d2.mm;
   newNodeHK->cout_year  = newNodef->cout_year  = d2.yy;
   newNodeHK->amount  = newNodef->amount  = amount;
-
   if(headHK != 0) {
     tempHK->next = newNodeHK;
     tempHK = newNodeHK;
