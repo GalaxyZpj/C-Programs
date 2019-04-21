@@ -215,10 +215,10 @@ void fileRetrive() {
   strcpy(tname, path);
   strcat(tname, temp->username);
   strcat(tname, ".txt");
-  FILE *fp = fopen(tname, "r");
+  FILE *fp = fopen(tname, "r+");
   while(!feof(fp)) {
     newNodef = (UFILE *)malloc(sizeof(UFILE));
-    fscanf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", &newNodef->key, &newNodef->id, newNodef->name, &newNodef->cin_day, &newNodef->cin_month, &newNodef->cin_year, &newNodef->cout_day, &newNodef->cout_month, &newNodef->cout_year, &newNodef->amount);
+    //fscanf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", newNodef->key, &newNodef->id, newNodef->name, &newNodef->cin_day, &newNodef->cin_month, &newNodef->cin_year, &newNodef->cout_day, &newNodef->cout_month, &newNodef->cout_year, &newNodef->amount);
     if(headf != 0) {
       tempf->next = newNodef;
       tempf = newNodef;
@@ -229,6 +229,7 @@ void fileRetrive() {
   }
   tempf->next = NULL;
   fclose(fp);
+
   tempf = headf;
   while(tempf != NULL) {
     if(tempf->key == 'h') {
@@ -250,7 +251,7 @@ void fileRetrive() {
       else {
         headHK = tempHK = newNodeHK;
       }
-    } if(tempf->key == 'f') {
+    } else {
       newNodeFK = (FK *)malloc(sizeof(FK));
       newNodeFK->key = tempf->key;
       newNodeFK->id  = tempf->id;
@@ -272,11 +273,8 @@ void fileRetrive() {
     }
     tempf = tempf->next;
   }
-  if(tempHK != 0)
-    tempHK->next = NULL;
-  if(tempFK != 0)
-    tempFK->next = NULL;
-
+  tempHK->next = NULL;
+  tempFK->next = NULL;
 }
 void sortList(HOTEL *headS) {
   HOTEL *tempS, *tempS1, *tempS2;
@@ -304,16 +302,36 @@ struct day{
   int mm;
   int yy;
 };
-struct day date;
+struct day curr;
 struct day d;
 struct day d1;
 struct day d2;
 COORD xy={0,0};
+struct day currentDate() {
+  time_t rawtime;
+    struct tm*  time_;
+    struct day cdate;
+    time(&rawtime);
+    time_ = localtime(&rawtime);
+    cdate.dd=time_->tm_mday;
+    cdate.mm=time_->tm_mon+1;
+    cdate.yy=time_->tm_year+1900;
+    return(cdate);
+}
 void gotoxy(int x, int y){
   xy.X=x;
   xy.Y=y;
   SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),xy);
 }
+/*void pointday(int tdays,int date){
+  int i;
+  for(i=0;i<date;i++){
+    if(i==date-1){
+      gotoxy(xpos,ypos);
+      printf("_");
+    }
+  }
+}*/
 void plus(int *month, int *year){
   ++*month;
   if(*month>12){
@@ -420,8 +438,11 @@ int getDayNumber(int day,int mon,int year){
     res = res % 7;
     return res;
 }
-void printcalender(int month, int year, int x, int y){
+void printcalender(struct day curr, int x, int y){
   int d=1, count,x1=x;
+  int month=curr.mm;
+  int year=curr.yy;
+  int date=curr.dd;
   if(month<1 || month >12 ){
     printf("INVALID MONTH!\n");
 //    break;
@@ -489,27 +510,29 @@ void printcalender(int month, int year, int x, int y){
     count++;
     printf("%d\t",d );
   }
+
+  //pointday(n,date);
   gotoxy(8, y+2);
-  printf("\nPress 'n'  to Next, Press 'p' to Previous and 'q' to Quit");
+  printf("\nPress 'UP'  to Next, Press 'DOWN' to Previous and '0' to Quit");
 }
 struct day calendermain(){
   char c;
-  printf("Enter month and year(MM YYYY):\n");
-  scanf("%d %d",&date.mm ,&date.yy);
+  curr=currentTime();
+  //scanf("%d %d",&date.mm ,&date.yy);
   system("cls");
 
-  while(c!='q'){
-    printcalender(date.mm,date.yy,20,5);
+  while(c!='0'){
+    printcalender(curr,20,5);
     c=getch();
-    if(c=='n'){
-      plus(&date.mm,&date.yy);
+    if(GetAsyncKeyState(VK_UP)){
+      plus(&curr.mm,&curr.yy);
       system("cls");
-      printcalender(date.mm,date.yy,20,5);
+      printcalender(curr,20,5);
       }
-    if(c=='p'){
-      minus(&date.mm,&date.yy);
+    if(GetAsyncKeyState(VK_DOWN)){
+      minus(&curr.mm,&curr.yy);
       system("cls");
-      printcalender(date.mm,date.yy,20,5);
+      printcalender(curr,20,5);
       }
     }
     system("cls");
@@ -517,6 +540,7 @@ struct day calendermain(){
     scanf("%d %d %d",&d.dd, &d.mm, &d.yy);
   return(d);
 }
+
 
 //FlightBooking SubFunctions
 void flightRecords(int amount, int tid) {
