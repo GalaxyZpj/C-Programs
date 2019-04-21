@@ -964,10 +964,10 @@ void displayPreviousRecords(HK *headHK, HK*tempHK){
   else{
     tempHK=headHK;
     printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("Transaction ID\t\t\t\t\tHOTEL NAME\t\t\t\t  CHECK IN DATE  \t\t\t\t  CHECK OUT DATE  \t\t\t\t  AMOUNT\n");
+    printf("Transaction ID\t\t\tHOTEL NAME\t\t\t\tCHECK IN DATE\t\t\t\tCHECK OUT DATE\t\t\t\tAMOUNT\n");
     printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     while(tempHK!=0){
-      printf("%30d\t\t\t\t\t%45s\t\t\t  %d-%d-%d  \t\t\t\t  %d-%d-%d  \t\t\t\t  %d\n",tempHK->id, tempHK->name, tempHK->cin_day, tempHK->cin_month, tempHK->cin_year, tempHK->cout_day, tempHK->cout_month, tempHK->cout_year, tempHK->amount );
+      printf("%10d %35s  %30d-%2d-%2d  %30d-%2d-%2d %30d\n",tempHK->id, tempHK->name, tempHK->cin_day, tempHK->cin_month, tempHK->cin_year, tempHK->cout_day, tempHK->cout_month, tempHK->cout_year, tempHK->amount );
       tempHK=tempHK->next;
     }
   }
