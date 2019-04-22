@@ -138,6 +138,7 @@ void aboutUs();
 void menu();
 
 void fileToList();
+void adminLogin();
 void createUser();
 void loginCheck(char uname[], char upass[]);
 void login();
@@ -634,7 +635,7 @@ void display() {
   printf("*********************************************");
   system("cls");
   FILE *f;
-  f=fopen("./details.txt","r");
+  f=fopen("./Source Files/FLIGHT FILES/details.txt","r");
 //copying the content of file to structure nodes
   while(!feof(f)) {
     s=(struct filenode*)malloc(sizeof(struct filenode));
@@ -714,14 +715,14 @@ void reserve() {
   }
   //printing individual ticket details for each new noode -> each time new record in ticket.txt
   FILE*f;
-  f=fopen("./ticket.txt","w");
+  f=fopen("./Source Files/FLIGHT FILES/ticket.txt","w");
   fprintf(f,"NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
   fclose(f);
   printf("Your records have been saved!");
 
 //printing all details of everyone to a record book ALL_RECORDS ->appending data
   FILE*fp;
-  fp=fopen("./allrecords.txt","a");
+  fp=fopen("./Source Files/FLIGHT FILES/allrecords.txt","a");
   struct node*temp;
   temp=(struct node*)malloc(sizeof(struct node));
   temp=headi;
@@ -752,7 +753,7 @@ system("cls");
 
 reserve();
 FILE*f;
-f=fopen("./ticket.txt","r");
+f=fopen("./Source Files/FLIGHT FILES/ticket.txt","r");
 system("color 1F");
 while(!feof(f)) {
   fscanf(f,"NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,&ptr->clas,&ptr->adults,&ptr->children,&ptr->infants,&ptr->trip_type,&ptr->routing);
@@ -1197,6 +1198,9 @@ void fileToList() {
   temp->next = NULL;
   fclose(fp);
 }
+void adminLogin() {
+
+}
 void createUser() {
   newNode = (USER *)malloc(sizeof(USER));
   printf("Username: ");
@@ -1280,13 +1284,15 @@ void login() {
   loginCheck(tuname, tupass);
 }
 void userPortal() {
-  #define MAX 2
+  #define MAX 3
   #define MIN 1
   while(keyPressed != 13) {
     clrscr();
     printf("**********TRAVALISTA**********\n");
-    arrorHere(1, position); printf("1. Login\n");
-    arrorHere(2, position); printf("2. Signup\n");
+    printf("\n---USERLOGIN---\n");
+    arrorHere(1, position); printf("1. LOGIN\n");
+    arrorHere(2, position); printf("2. SIGNUP\n\n");
+    arrorHere(3, position); printf("0. <ADMINLOGIN>\n");
     keyPressed = getch();
 
     if(keyPressed == 80 && position != MAX) {
@@ -1300,9 +1306,8 @@ void userPortal() {
 
   switch(position) {
     case 1: login(); break;
-
     case 2: createUser(); break;
-
+    case 3: adminLogin(); break;
     default: printf("Invalid choice.\n"); clrscr(); userPortal();
 
   }
@@ -1317,6 +1322,7 @@ int main() {
      temp->ed.eb.day, temp->ed.eb.month, temp->ed.eb.year, temp->ed.contact, temp->ed.state, temp->ed.city);
      temp = temp->next;
   }*/
+  system("COLOR F0");
   userPortal();
   return 0;
 }
