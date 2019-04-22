@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <conio.h>
 
-int ID_init = 16142300, hcount = 0, fcount = 0;
+int ID_init, hcount = 0, fcount = 0;
 
 //Linked Lists for the Program
 typedef struct user {
@@ -103,6 +103,10 @@ void arrorHere(int, int);
 void fileEntry();
 void fileRetrive();
 void sortList(HOTEL *headS);
+void freeHotel();
+void freeFilenode();
+void scanID();
+void writeID();
 
 //void gotoxy(int , int);
 //void plus(int, int);
@@ -173,7 +177,7 @@ void paymentPortal(int amount) {
   printf(":::CONFIRM PAYMENT:::\nPress 1 to confirm else 0 to reenter card details:-\n");
   c = getch();
   if(c == '1') {
-    tid = (1*69) + ID_init;
+    tid = (1*69) + ID_init; ID_init = tid; writeID();
     printf("Your transaction id is: %d\n\nPress any key to display booking details\n", tid);
     getch();
     hotelRecords(amount, tid);
@@ -199,15 +203,15 @@ void fileEntry() {
   strcpy(tname, path);
   strcat(tname, temp->username);
   strcat(tname, ".txt");
-  FILE *fp = fopen(tname, "a+");
+  FILE *fp = fopen(tname, "w+");
   while(tempf != NULL) {
     fprintf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", tempf->key, tempf->id, tempf->name, tempf->cin_day, tempf->cin_month, tempf->cin_year, tempf->cout_day, tempf->cout_month, tempf->cout_year, tempf->amount);
     tempf = tempf->next;
   }
+  fclose(fp);
   printf("Entry Successful!!!\n\nPress any key to return to main menu.");
   getch();
   menu(temp->username);
-  fclose(fp);
 }
 void fileRetrive() {
   char tname[100];
@@ -294,6 +298,37 @@ void sortList(HOTEL *headS) {
       }
     }
   }
+}
+void freeHotel() {
+  tempH1 = headH;
+  while(tempH1 != NULL) {
+    tempH = tempH1->next;
+    free(tempH1);
+    tempH1 = tempH;
+  }
+  headH = 0;
+
+}
+void freeFilenode() {
+  struct filenode *temp1 = headd;
+  struct filenode *temp = temp1->next;
+  while(temp1 != NULL) {
+    temp = temp1->next;
+    free(temp1);
+    temp1 = temp;
+  }
+  headd = NULL;
+}
+void scanID() {
+  FILE *fp = fopen("./Source Files/ID.txt", "r");
+  while(!feof(fp))
+    fscanf(fp, "%d", &ID_init);
+  fclose(fp);
+}
+void writeID() {
+  FILE *fp = fopen("./Source Files/ID.txt", "w");
+  fprintf(fp, "%d", ID_init);
+  fclose(fp);
 }
 
 
@@ -582,19 +617,17 @@ void flightRecords(int amount, int tid) {
 
 }
 void display() {
+  struct filenode *s=0,*temp=0;
   system("color 0E");
-
-
-struct filenode *s=0,*temp=0;
-char source [10],destination[15];
-system("cls");
+  char source [10],destination[15];
+  system("cls");
 
   printf("For checking the details of available flights,\n\n please enter nearest INTERNATIONAL AIRPORT\n\n\t DELHI->INDIRA GANDHI INTERNATIONAL AIRPORT \n\n\tMUMBAI->CHHATRAPATI SHIVAJI INTERNATIONAL AIRPORT\n\n\tCHENNAI->CHENNAI INTERNATIONAL AIRPORT\n ");
   printf("Enter source name as DELHI \t / MUMBAI \t /CHENNAI ");
   scanf("%s",source );
   printf("*******************************************");
   system ("cls");
-system("color 2B");
+  system("color 2B");
   printf("\n\n\n Now enter the destination  \n");
   printf("choose from the below given list ");
   printf("\n\nRUSSIA\nUK\nSPAIN\nFRANCE\nTORONTO\nSINGAPORE\nSOUTHKOREA\nEUROPE\nHONGKONG\nDUBAI \n");
@@ -603,39 +636,30 @@ system("color 2B");
   system("cls");
   FILE *f;
   f=fopen("./details.txt","r");
-
-  //copying the content of file to structure nodes
-  while(!feof(f))
-  {
-  s=(struct filenode*)malloc(sizeof(struct filenode));
-  fscanf(f,"%s %s %s %d\n",s->src,s->desti,s->flightno,&s->fare);
-  if(headd!=0)
-  {
-    temp->next=s;
-    temp=s;
+//copying the content of file to structure nodes
+  while(!feof(f)) {
+    s=(struct filenode*)malloc(sizeof(struct filenode));
+    fscanf(f,"%s %s %s %d\n",s->src,s->desti,s->flightno,&s->fare);
+    if(headd!=0) {
+      temp->next=s;
+      temp=s;
+    } else {
+      headd=temp=s;
+    }
   }
-  else{
-    headd=temp=s;
-  }
-}
-temp->next=NULL;
-fclose(f);
+  temp->next=NULL;
+  fclose(f);
 //now extracting the values from these nodes to get desired output
-temp=headd;
-while(temp!=0)
-{
-  if(strcmpi(temp->src,source)==0&&strcmpi(temp->desti,destination)==0)
-  { printf("SOURCE\t\t\tDESTINATION\t\tFLIGHT_NO\t\tFARE\n");
+  temp=headd;
+  while(temp!=0) {
+    if(strcmpi(temp->src,source)==0&&strcmpi(temp->desti,destination)==0) {
+    printf("SOURCE\t\t\tDESTINATION\t\tFLIGHT_NO\t\tFARE\n");
     printf("%s\t\t\t%s\t\t\t%s\t\t\t%d\t\n",temp->src,temp->desti,temp->flightno,temp->fare);
-
+    }
+    temp=temp->next;
   }
-  temp=temp->next;
-}
 // nested function ->calling confirmation() inside display function
-
-
 confirmation();
-
 }
 void reserve() {
 
@@ -753,7 +777,7 @@ fclose(f);
 //HotelBooking SubFunctions
 void hotelRecords(int amount, int tid) {
   newNodeHK = (HK *)malloc(sizeof(HK));
-  newNodef = (UFILE *)malloc(sizeof(UFILE));
+  newNodef = (UFILE *)malloc(sizeof(UFILE)); newNodef->next = NULL;
   newNodeHK->key = newNodef->key = 'h';
   newNodeHK->id  = newNodef->id = tid;
   strcpy(newNodeHK->name, tempH1->name);
@@ -775,13 +799,16 @@ void hotelRecords(int amount, int tid) {
   tempHK->next = NULL;
 
   if(headf != 0) {
+    tempf = headf;
+    while(tempf->next != NULL) {
+      tempf = tempf->next;
+    }
     tempf->next = newNodef;
     tempf = newNodef;
   }
   else {
     headf = tempf = newNodef;
   }
-  tempf->next = NULL;
   clrscr();
   //printf("\n:::BOOKING DETAILS:::\n");
   fileEntry();
@@ -959,29 +986,35 @@ void hotelPrinting(char country[]) {
   getch();
 }
 void displayPreviousRecords(HK *headHK, HK*tempHK){
+  clrscr();
   if(headHK==0){
     printf("NO PREVIOUS RECORDS...\n");
   }
   else{
-    tempHK=headHK;
-    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("Transaction ID\t\t\tHOTEL NAME\t\t\t\tCHECK IN DATE\t\t\t\tCHECK OUT DATE\t\t\t\tAMOUNT\n");
-    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    while(tempHK!=0){
-      printf("%10d %35s  %30d-%2d-%2d  %30d-%2d-%2d %30d\n",tempHK->id, tempHK->name, tempHK->cin_day, tempHK->cin_month, tempHK->cin_year, tempHK->cout_day, tempHK->cout_month, tempHK->cout_year, tempHK->amount );
-      tempHK=tempHK->next;
+    tempf=headf;
+    printf("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("Transaction ID\t\t\t\tHOTEL NAME/FLIGHT NO.\t\t\t\tCHECK IN DATE\t\t\t\tCHECK OUT DATE\t\t\t\tAMOUNT\n");
+    printf("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    while(tempf!=0){
+      printf("%10d %50s  %30d-%2d-%2d  %30d-%2d-%2d %32d\n",tempf->id, tempf->name, tempf->cin_day, tempf->cin_month, tempf->cin_year, tempf->cout_day, tempf->cout_month, tempf->cout_year, tempf->amount );
+      tempf=tempf->next;
     }
   }
+  printf("\nPress any key to return to main menu...\n");
+  getch();
+  menu(temp->username);
 }
 
 //TravalistaCoreFunctions
 void flightBooking() {
   clrscr();
   printf("****************WELCOME TO TRAVELISTA FLIGHT BOOKING MODE********************\n");
-printf("While booking flights with TRAVELISTA, you can expect the ultimate online booking experience.\n With premium customer service, 24/7 dedicated helpline for support, TRAVELISTA takes great pride in enabling customer satisfaction.\n With a cheapest flight guarantee, book your tickets at the lowest airfares.\n Avail great offers, exclusive deals for loyal customers and get instant updates for your flight status and fare drops.");
-
-display();
-  }
+  printf("While booking flights with TRAVELISTA, you can expect the ultimate online booking experience.\n With premium customer service, 24/7 dedicated helpline for support, TRAVELISTA takes great pride in enabling customer satisfaction.\n With a cheapest flight guarantee, book your tickets at the lowest airfares.\n Avail great offers, exclusive deals for loyal customers and get instant updates for your flight status and fare drops.");
+  display();
+  printf("\nPress any key to return to main menu...");
+  getch();
+  menu(temp->username);
+}
 void hotelBooking() {
   keyPressed = 0; position = 1;
   clrscr();
@@ -1099,6 +1132,9 @@ void aboutUs() {
 //MainMenuFunction
 void menu(char mname[]) {
 
+  freeHotel();
+  scanID();
+  //freeFilenode();
   position = 1; keyPressed = 0;
   clrscr();
   while(keyPressed != 13) {
@@ -1139,7 +1175,6 @@ void menu(char mname[]) {
     default: printf("Invalid Choice, Press any key to try again.\n"); getchar(); menu(mname);
   }
   getch();
-
 }
 
 
