@@ -64,7 +64,7 @@ HK *newNodeHK, *headHK = 0, *tempHK = 0, *temp1HK = 0;
 //Flight's
 struct node {
   char name[30];
-  char clas[20];
+  int clas;
   int adults;
   int children;
   int infants;
@@ -73,11 +73,12 @@ struct node {
   char mobileno[11];
   struct node*next;
 
-}*headi=NULL;
+}*ptr,*current, *headi=NULL;
+//***********************************
 
-struct filenode{
+struct filenode {
   char src[15],desti[15];
-  int flightno;
+  char flightno[7];
   int fare ;
   struct filenode*next;
 }*headd=NULL;
@@ -115,10 +116,9 @@ void sortList(HOTEL *headS);
 //struct day calendermain();
 
 void flightRecords(int amount, int tid);
-void confirmation();
-void reserve();
-void cancel();
 void display();
+void reserve();
+void confirmation();
 
 void hotelRecords(int amount, int tid);
 void hotelFinalizing(HOTEL *op);
@@ -581,48 +581,83 @@ void flightRecords(int amount, int tid) {
   fileEntry();
 
 }
-void confirmation() { int flno;
-    int payout;
-    printf("Choose the desired flight from the list \n");
-    printf("enter the flight no");
-    scanf("%d",&flno);
-    system("cls");
-    printf("*************************************\n");
-    printf("*     BOOKING SUCCESSFULLY DONE!!   *\n");
-    printf("*************************************\n");
-     int pay()
-    {
-   struct filenode*ptrr;
-   ptrr=headd;
-    while(ptrr!=0)
-    {
-      if(ptrr->flightno==flno)
-      {
-        payout=ptrr->fare;
-      }
-      ptrr=ptrr->next;
-    }
-    printf("Your NET payable amount is:-");
-    return payout;
-    //return payout;
+void display() {
+  system("color 0E");
 
-  }}
+
+struct filenode *s=0,*temp=0;
+char source [10],destination[15];
+system("cls");
+
+  printf("For checking the details of available flights,\n\n please enter nearest INTERNATIONAL AIRPORT\n\n\t DELHI->INDIRA GANDHI INTERNATIONAL AIRPORT \n\n\tMUMBAI->CHHATRAPATI SHIVAJI INTERNATIONAL AIRPORT\n\n\tCHENNAI->CHENNAI INTERNATIONAL AIRPORT\n ");
+  printf("Enter source name as DELHI \t / MUMBAI \t /CHENNAI ");
+  scanf("%s",source );
+  printf("*******************************************");
+  system ("cls");
+system("color 2B");
+  printf("\n\n\n Now enter the destination  \n");
+  printf("choose from the below given list ");
+  printf("\n\nRUSSIA\nUK\nSPAIN\nFRANCE\nTORONTO\nSINGAPORE\nSOUTHKOREA\nEUROPE\nHONGKONG\nDUBAI \n");
+  scanf("%s",destination);
+  printf("*********************************************");
+  system("cls");
+  FILE *f;
+  f=fopen("./details.txt","r");
+
+  //copying the content of file to structure nodes
+  while(!feof(f))
+  {
+  s=(struct filenode*)malloc(sizeof(struct filenode));
+  fscanf(f,"%s %s %s %d\n",s->src,s->desti,s->flightno,&s->fare);
+  if(headd!=0)
+  {
+    temp->next=s;
+    temp=s;
+  }
+  else{
+    headd=temp=s;
+  }
+}
+temp->next=NULL;
+fclose(f);
+//now extracting the values from these nodes to get desired output
+temp=headd;
+while(temp!=0)
+{
+  if(strcmpi(temp->src,source)==0&&strcmpi(temp->desti,destination)==0)
+  { printf("SOURCE\t\t\tDESTINATION\t\tFLIGHT_NO\t\tFARE\n");
+    printf("%s\t\t\t%s\t\t\t%s\t\t\t%d\t\n",temp->src,temp->desti,temp->flightno,temp->fare);
+
+  }
+  temp=temp->next;
+}
+// nested function ->calling confirmation() inside display function
+
+
+confirmation();
+
+}
 void reserve() {
-struct node*ptr,*current;
-ptr=(struct node*)malloc(sizeof(struct node));
+
+  ptr=(struct node*)malloc(sizeof(struct node));
 
 //taking details of the node
   printf("Dear Customer ,kindly enter your details please:- \n NAME:\n");
   scanf("%s",ptr->name);
+  do{
+    printf("Enter mobile number\n");                           //check for validity
+    scanf("%s",ptr->mobileno);
 
-  printf("Enter a valid mobile number\n");                           //check for validity
-  scanf("%s",ptr->mobileno);
+        if(strlen(ptr->mobileno)!=10){
+              printf("\n\t\tInvalid MOBILE NO .\n") ;
+        }
+      }while(strlen(ptr->mobileno)!=10);
 
-  printf("\t\tchoose the class :-\n1)bussiness\t2)economy\t3)premium economy\n please DO NOT  use CAPS while typing \n");
-  scanf("%s",ptr->clas);                                          //make it int type
+  printf("\t\tchoose the class(Press the corresponding number ) :-\n1)bussiness\t2)economy\t3)premium economy\n \n");
+  scanf("%d",&ptr->clas);
     system("cls");
 
- printf("\n\t\t\t**************************************************\n");
+  printf("\n\t\t\t**************************************************\n");
   printf("\t\t\tnow please enter the details of the traveller(s)\n" );                     //column wise representation
   printf("\t\t\t**************************************************\n\n");
 
@@ -654,99 +689,65 @@ ptr=(struct node*)malloc(sizeof(struct node));
     current->next=ptr;
     current=ptr;
   }
-
   //printing individual ticket details for each new noode -> each time new record in ticket.txt
   FILE*f;
-  f=fopen("./Source Files/FLIGHT FILES\\ticket.txt","w");
-  fprintf(f,"NAME:%s\nMOBILE_NO%s\nCLASS%s\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
+  f=fopen("./ticket.txt","w");
+  fprintf(f,"NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
   fclose(f);
+  printf("Your records have been saved!");
+
 //printing all details of everyone to a record book ALL_RECORDS ->appending data
-FILE*fp;
-fp=fopen("./Source Files/FLIGHT FILES\\allrecords.txt","a");
-struct node*temp;
-temp=(struct node*)malloc(sizeof(struct node));
-temp=headi;
-while (temp!=NULL){
-fprintf(fp,"NAME:%s\nMOBILE_NO%s\nCLASS%s\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",temp->name,temp->mobileno,temp->clas,temp->adults,temp->children,temp->infants,temp->trip_type,temp->routing);
-temp=temp->next;}
-fclose(fp);
-
-}
-void cancel() {  char str[20];
-   char mobile[11];
-  struct node*temp,*temp1;
-  //temp=(struct node*)malloc(sizeof(struct node));
+  FILE*fp;
+  fp=fopen("./allrecords.txt","a");
+  struct node*temp;
+  temp=(struct node*)malloc(sizeof(struct node));
   temp=headi;
-  printf("Please enter your name ");
-  scanf("%s",str);
-
-  printf("enter your mobile number which was registered during booking of ticket");
-  scanf("%s",mobile);
-
-  while(temp!=NULL&&strcmpi(temp->name,str)!=0&&strcmp(temp->mobileno,mobile)!=0)
-  {
-    temp1=temp;
+  while (temp!=NULL){
+    fprintf(fp,"NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",temp->name,temp->mobileno,temp->clas,temp->adults,temp->children,temp->infants,temp->trip_type,temp->routing);
     temp=temp->next;
   }
-  if(strcmpi(temp->name,str)==0&&strcmp(temp->mobileno,mobile)==0)
+  fclose(fp);
+}
+void confirmation() {
+  char flno[7];
+  int payout;
+  printf("Choose the desired flight from the list \n");
+  printf("enter the flight no");
+  scanf("%s",flno);
+
+ struct filenode*ptrr;
+ ptrr=headd;
+  while(ptrr!=0)
   {
-    temp1->next=temp->next;
-    free(temp);
-
-  }
-  printf("\t\t\nYour BOOKING has been cancelled\n\n");
-
-  }
-void display() {
-  int sum;
-  struct filenode *s=0,*temp=0;
-  char source [10],destination[15];
-  system("cls");
-    printf("For checking the details of available flights,\n please enter nearest INTERNATIONAL AIRPORT\n\t ->INDIRA GANDHI INTERNATIONAL AIRPORT \n\t->CHHATRAPATI SHIVAJI INTERNATIONAL AIRPORT\n\t->CHENNAI INTERNATIONAL AIRPORT\n ");
-    printf("enter source name as DELHI \t / MUMBAI \t /CHENNAI ");
-    scanf("%s",source );
-    printf("*******************************************");
-    system ("cls");
-    printf("\n\n\n Now enter the destination  \n");
-    printf("choose from the below given list ");
-    printf("\n\nRUSSIA\nUK\nSPAIN\nFRANCE\nTORONTO\nSINGAPORE\nSOUTHKOREA\nEUROPE\nHONGKONG\nDUBAI \n");
-    scanf("%s",destination);
-    printf("*********************************************");
-    system("cls");
-    FILE *f;
-    f=fopen("./Source Files/FLIGHT FILES\\Flights.txt","r");
-
-    //copying the content of file to structure nodes
-    while(!feof(f))
+    if(strcmp(ptrr->flightno,flno)==0)
     {
-    s=(struct filenode*)malloc(sizeof(struct filenode));
-    fscanf(f,"%s %s %d %d\n",s->src,s->desti,&s->flightno,&s->fare);
-    if(headd!=0)
-    {
-      temp->next=s;
-      temp=s;
+      payout=ptrr->fare;
     }
-    else{
-      headd=temp=s;
-    }
+    ptrr=ptrr->next;
   }
-  temp->next=NULL;
-  fclose(f);
-  //now extracting the values from these nodes to get desired output
-  temp=headd;
-  while(temp!=0)
-  {
-    if(strcmpi(temp->src,source)==0&&strcmpi(temp->desti,destination)==0)
-    { printf("SOURCE\t\t\tDESTINATION\t\tFLIGHT_NO\t\tFARE\n");
-      printf("%s\t\t\t%s\t\t\t%d\t\t\t%d\t\n",temp->src,temp->desti,temp->flightno,temp->fare);
+system("cls");
 
-    }
-    temp=temp->next;
-  }
-  // nested function ->calling confirmation() inside display function
-  confirmation();
+reserve();
+FILE*f;
+f=fopen("./ticket.txt","r");
+system("color 1F");
+while(!feof(f)) {
+  fscanf(f,"NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,&ptr->clas,&ptr->adults,&ptr->children,&ptr->infants,&ptr->trip_type,&ptr->routing);
+}
+printf("\n\n\n\t\t\t\tTICKET\n\n\n");
+ printf("NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
+printf("\n\n*****************************************************\n");
+printf("FlightNO--->>%s\n",flno);
+printf("Total fare--->>%d\n",payout);
+printf("**********************************************************");
 
-  }
+system("cls");
+printf("*************************************\n");
+printf("*     BOOKING SUCCESSFULLY DONE!!   *\n");
+printf("*************************************\n\n\n");
+printf("Your NET payable amount is%d:-\n",payout);
+fclose(f);
+}
 
 
 //HotelBooking SubFunctions
@@ -976,36 +977,10 @@ void displayPreviousRecords(HK *headHK, HK*tempHK){
 //TravalistaCoreFunctions
 void flightBooking() {
   clrscr();
-  int choice;
-    printf("****************WELCOME TO TRAVELISTA FLIGHT BOOKING MODE********************\n");
-    printf("While booking flights with TRAVELISTA, you can expect the ultimate online booking experience.\n With premium customer service, 24/7 dedicated helpline for support, TRAVELISTA takes great pride in enabling customer satisfaction.\n With a cheapest flight guarantee, book your tickets at the lowest airfares.\n Avail great offers, exclusive deals for loyal customers and get instant updates for your flight status and fare drops.");
+  printf("****************WELCOME TO TRAVELISTA FLIGHT BOOKING MODE********************\n");
+printf("While booking flights with TRAVELISTA, you can expect the ultimate online booking experience.\n With premium customer service, 24/7 dedicated helpline for support, TRAVELISTA takes great pride in enabling customer satisfaction.\n With a cheapest flight guarantee, book your tickets at the lowest airfares.\n Avail great offers, exclusive deals for loyal customers and get instant updates for your flight status and fare drops.");
 
-  printf("\n\n\n\t\t**************MENU********************\n");
-  printf("choose a number to perform any of these functions");
-  do {
-
-      printf("\n\t  1.BOOK TICKET ");
-      printf("\n\t  2.CHECK FOR ALL FLIGHTS AVAILABLE AS PER CHOICE DOMAIN");
-      printf("\n\t  3.CANCEL BOOKING ");
-      printf("\n\t  4.RETURN TO MAIN MENU ");
-      scanf("%d", &choice);
-
-
-      switch (choice) {
-
-      case 1: reserve();
-          break;
-      case 3: cancel();
-          break;
-      case 2: display();
-          break;
-      case 4: menu(temp->username);
-          break;
-      default:
-          printf("\nInvalid Choice");
-      }
-
-   } while (choice != 4);
+display();
   }
 void hotelBooking() {
   keyPressed = 0; position = 1;
@@ -1123,7 +1098,7 @@ void aboutUs() {
 
 //MainMenuFunction
 void menu(char mname[]) {
-  
+
   position = 1; keyPressed = 0;
   clrscr();
   while(keyPressed != 13) {
