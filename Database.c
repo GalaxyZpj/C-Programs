@@ -554,7 +554,6 @@ void printcalender(struct day curr, int x, int y){
 struct day calendermain(){
   char c;
   curr=currentDate();
-  //scanf("%d %d",&date.mm ,&date.yy);
   system("cls");
 
   while(c!='0'){
