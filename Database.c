@@ -1063,7 +1063,43 @@ void emergencyEnquiry() {
 
 }
 void feedback() {
+  clrscr();
+  char fback[1000];
+    int rate;
+    printf("Rate us out of 5:\n");
+    printf("1 for Unsatisfied\n2 for Can-be-better\n3 for Average\n4 for Good\n5 for Excellent\n");
+    scanf("%d", &rate);
+    printf("Rated: ");
+    if(rate>0 && rate<6)
+    {
+        switch(rate){
+        case 1:
+            printf("Unsatisfied\n");
+            break;
+        case 2:
+            printf("Can-be-better\n");
+            break;
+        case 3:
+            printf("Average\n");
+            break;
+        case 4:
+            printf("Good\n");
+            break;
+        case 5:
+            printf("Excellent\n");
+            break;
+        }
+        printf("Please provide your feedback.... Highly appreciated!\n");
+        fflush(stdin);
+        gets(fback);
+        printf("Your feedback: ");
+        puts(fback);
+        printf("Thanks a lot for the feedback!\nPress any key to return to main menu.");
+        getch();
+        menu(temp->username);
 
+    }
+    else printf("Invalid Choice!\n");
 }
 void aboutUs() {
  clrscr();
@@ -1087,7 +1123,7 @@ void aboutUs() {
 
 //MainMenuFunction
 void menu(char mname[]) {
-  fileRetrive();
+  
   position = 1; keyPressed = 0;
   clrscr();
   while(keyPressed != 13) {
@@ -1202,6 +1238,7 @@ void loginCheck(char uname[], char upass[]) {
   while(temp != NULL) {
     if(strcmp(uname, temp->username) == 0) {
       if(strcmp(upass, temp->password) == 0) {
+        fileRetrive();
         menu(temp->username);
         temp = head;
         break;
