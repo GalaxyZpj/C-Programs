@@ -187,7 +187,6 @@ void paymentPortal(int amount) {
     tid = (1*69) + ID_init; ID_init = tid; writeID();
     printf("Your transaction id is: %d\n\nPress any key to display booking details\n", tid);
     getch();
-    hotelRecords(amount, tid);
   }
   else {
     paymentPortal(amount);
@@ -317,12 +316,12 @@ void freeHotel() {
 
 }
 void freeFilenode() {
-  struct filenode *temp1 = headd;
-  struct filenode *temp = temp1->next;
-  while(temp1 != NULL) {
-    temp = temp1->next;
+  struct filenode *tempFN = headd;
+  struct filenode *tempFN1;
+  while(tempFN != NULL) {
+    tempFN1 = tempFN->next;
     free(temp1);
-    temp1 = temp;
+    tempFN = tempFN1;
   }
   headd = NULL;
 }
@@ -666,16 +665,12 @@ void reserve() {
   char c1;
   c1 = getch();
   ptr->routing = (int)(c1 - '0');
-
   ptr->next=NULL;
-
-  if(headi==NULL)
-  {
+  if(headi==NULL) {
     headi=ptr;
     current=ptr;
   }
-
-  else{
+  else {
     current->next=ptr;
     current=ptr;
   }
@@ -685,14 +680,13 @@ void reserve() {
   fprintf(f,"NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
   fclose(f);
   printf("Your records have been saved!");
-
 //printing all details of everyone to a record book ALL_RECORDS ->appending data
   FILE*fp;
   fp=fopen("./Source Files/FLIGHT FILES/allrecords.txt","a");
   struct node*temp;
   temp=(struct node*)malloc(sizeof(struct node));
   temp=headi;
-  while (temp!=NULL){
+  while (temp!=NULL) {
     fprintf(fp,"NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",temp->name,temp->mobileno,temp->clas,temp->adults,temp->children,temp->infants,temp->trip_type,temp->routing);
     temp=temp->next;
   }
@@ -960,7 +954,7 @@ void hotelFinalizing(HOTEL *op) {
     case 1: paymentPortal(tprice); break;
     case 2: hotelFinalizing(op); break;
   }
-
+  hotelRecords(tprice, ID_init);
 }
 void hotelPrinting(char country[]) {
   clrscr();
@@ -1198,25 +1192,33 @@ void aboutUs() {
 
 //MainMenuFunction
 void menu(char mname[]) {
-
+  system("COLOR F0");
   freeHotel();
   scanID();
-  //freeFilenode();
+  freeFilenode();
   position = 1; keyPressed = 0;
   clrscr();
   while(keyPressed != 13) {
     clrscr();
-    printf("\n---------------------------------------- TRAVALISTA ----------------------------------------\n");
-    printf("Welcome @%s\t\t\t\t\t\t\t\tLogin Date and Time\n\t\t\t\t\t\t\t\t\t", mname);
+    printf("\n---------------------------------------- TRAVALISTA ---------------------------------------------\n");
+    printf(" Login Date and Time\t\t\t\t\t\t\t\tWelcome @%s\n ", mname);
     currentTime();
     printf("\nChoose among the following:-\n");
+    printf("-------------------------------------------------------------------------------------------------\n");
     arrorHere(1, position); printf("1. Flight Booking\n");
+    printf("-------------------------------------------------------------------------------------------------\n");
     arrorHere(2, position); printf("2. Hotel Booking\n");
+    printf("-------------------------------------------------------------------------------------------------\n");
     arrorHere(3, position); printf("3. Emergency Enquiry\n");
+    printf("-------------------------------------------------------------------------------------------------\n");
     arrorHere(4, position); printf("4. Feedback\n");
+    printf("-------------------------------------------------------------------------------------------------\n");
     arrorHere(5, position); printf("5. About us\n");
+    printf("-------------------------------------------------------------------------------------------------\n");
     arrorHere(6, position); printf("6. Previous Records\n");
+    printf("-------------------------------------------------------------------------------------------------\n");
     arrorHere(7, position); printf("0. Exit\n");
+    printf("-------------------------------------------------------------------------------------------------\n");
     keyPressed = getch();
 
     if(keyPressed == 80 && position != 7) {
