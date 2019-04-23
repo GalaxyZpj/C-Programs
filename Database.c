@@ -337,13 +337,6 @@ void writeID() {
 
 
 //CalenderFunctions
-#include <stdlib.h>
-#include <stdio.h>
-#include <conio.h>
-#include <time.h>
-#include <windows.h>
-
-
 struct day{
   int dd;
   int mm;
@@ -598,7 +591,6 @@ struct day calendermain(){
   return(d);
 }
 
-
 //FlightBooking SubFunctions
 void flightRecords(int amount, int tid) {
   newNodeFK = (FK *)malloc(sizeof(FK));
@@ -733,14 +725,32 @@ system("color 1F");
 while(!feof(f)) {
   fscanf(f,"NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,&ptr->clas,&ptr->adults,&ptr->children,&ptr->infants,&ptr->trip_type,&ptr->routing);
 }
-printf("\n\n\n\t\t\t\tTICKET\n\n\n");
- printf("NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
-printf("\n\n*****************************************************\n");
-printf("FlightNO--->>%s\n",flno);
-printf("Total fare--->>%d\n",payout);
-printf("**********************************************************");
-getch();
 
+keyPressed = 0; position = 1;
+while(keyPressed != 13) {
+  clrscr();
+  printf("\n\n\n\t\t\t\tTICKET\n\n\n");
+  printf("NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
+  printf("\n\n*****************************************************\n");
+  printf("FlightNO--->>%s\n",flno);
+  printf("Total fare--->>%d\n",payout);
+  printf("**********************************************************\n");
+  printf("\nProceed for the payment:-\n");
+  arrorHere(1, position); printf("  YES\n");
+  arrorHere(2, position); printf("  NO\n");
+  keyPressed = getch();
+  if(keyPressed == 80 && position != 2) {
+    position++;
+  }else if(keyPressed == 72 && position != 1) {
+    position--;
+  }else {
+    position = position;
+  }
+}
+  switch(position) {
+    case 1: paymentPortal(payout); break;
+    case 2: display(); break;
+  }
 system("cls");
 printf("*************************************\n");
 printf("*     BOOKING SUCCESSFULLY DONE!!   *\n");
@@ -749,6 +759,7 @@ printf("Your NET payable amount is%d:-\n",payout);
 fclose(f);
 }
 void display() {
+  freeFilenode();
   struct filenode *s=0,*temp=0;
   //system("color 0E");
   char source [10],destination[15];
@@ -847,9 +858,6 @@ case 10: strcpy(destination, "Dubai"); break;
 // nested function ->calling confirmation() inside display function
 confirmation();
 }
-
-
-
 
 //HotelBooking SubFunctions
 void hotelRecords(int amount, int tid) {
@@ -1415,10 +1423,47 @@ void recordBook(){
     }
    }
  }
-
 void revenue(){}
 void sessionRecords(){}
 void usrfeeds(){}
+void adminMenu() {
+  position = 1; keyPressed = 0;
+  clrscr();
+  while(keyPressed != 13) {
+    clrscr();
+    printf(":::::ADMIN MENU:::::\n");
+    arrorHere(1, position); printf("1. List of users\n");
+    arrorHere(2, position); printf("2. Total Bookings\n");
+    arrorHere(3, position); printf("3. Amount generated \n");
+    arrorHere(4, position); printf("4. Login Session Records\n");
+    arrorHere(5, position); printf("5. Feedbacks\n");
+    //arrorHere(6, position); printf("6. Previous Records\n");
+    arrorHere(6, position); printf("0. Exit\n");
+    keyPressed = getch();
+
+    if(keyPressed == 80 && position != 6) {
+      position++;
+    }else if(keyPressed == 72 && position != 1) {
+      position--;
+    }else {
+      position = position;
+    }
+  }
+  switch(position) {
+    case 1:userList(head, temp); break;
+
+    case 2: recordBook(); break;
+
+    case 3: revenue(); break;
+
+    case 4: sessionRecords(); break;
+
+    case 5: usrfeeds(); break;
+
+    case 6: exit(0); break;
+  }
+  getch();
+}
 
 
 //LoginIntoDatabaseFunctions
@@ -1442,48 +1487,18 @@ void fileToList() {
   fclose(fp);
 }
 void adminLogin() {
+  clrscr();
   char aPass[25];
-  printf("ENTER PASSWORD:\n");
+  printf("ENTER ADMINSTRATOR PASSWORD:\n");
   scanf("%s",aPass);
   if(strcmp(aPass,"admintravaliz")==0){
-    position = 1; keyPressed = 0;
-    clrscr();
-    while(keyPressed != 13) {
-      clrscr();
-      printf(":::::ADMIN MENU:::::\n");
-      arrorHere(1, position); printf("1. List of users\n");
-      arrorHere(2, position); printf("2. Total Bookings\n");
-      arrorHere(3, position); printf("3. Amount generated \n");
-      arrorHere(4, position); printf("4. Login Session Records\n");
-      arrorHere(5, position); printf("5. Feedbacks\n");
-      //arrorHere(6, position); printf("6. Previous Records\n");
-      arrorHere(6, position); printf("0. Exit\n");
-      keyPressed = getch();
-
-      if(keyPressed == 80 && position != 6) {
-        position++;
-      }else if(keyPressed == 72 && position != 1) {
-        position--;
-      }else {
-        position = position;
-      }
-    }
-    switch(position) {
-      case 1:userList(head, temp); break;
-
-      case 2: recordBook(); break;
-
-      case 3: revenue(); break;
-
-      case 4: sessionRecords(); break;
-
-      case 5: usrfeeds(); break;
-
-      case 6: exit(0); break;
-    }
-    getch();
+    adminMenu();
   }
-  else printf("ADMIN PASSWORD INVALID!!\n");
+  else {
+    printf("ADMIN PASSWORD INVALID!!\nPress any key to login again.\n");
+    getch();
+    adminLogin();
+  }
 }
 void createUser() {
   newNode = (USER *)malloc(sizeof(USER));
