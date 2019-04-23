@@ -1188,7 +1188,61 @@ void menu(char mname[]) {
 }
 
 //AdminFunctions
-void userList(){}
+void userList(USER *head, USER* temp){
+  int n;
+  char sname[25];
+  position = 1; keyPressed = 0;
+  clrscr();
+  while(keyPressed != 13) {
+    clrscr();
+    printf("CHOOSE FROM THE OPTIONS:\n");
+    arrorHere(1, position); printf("1. Search for a user\n");
+    arrorHere(2, position); printf("2. Show complete list\n");
+    keyPressed = getch();
+
+    if(keyPressed == 80 && position != 2) {
+      position++;
+    }else if(keyPressed == 72 && position != 1) {
+      position--;
+    }else {
+      position = position;
+    }
+  }
+  switch(position) {
+    case 1:{
+      printf("Enter username:\n");
+      scanf("%s",sname);
+      temp=head;
+      while(temp!=NULL) {
+        if(strcmp(temp->username,sname) == 0) {
+          clrscr();
+          printf("%s\t\t\t%s %s\t\t\t\t%s\t\t\t\t%s %s \n",temp->username, temp->ed.fName, temp->ed.lName, temp->ed.contact, temp->ed.city, temp->ed.state);
+        }
+        temp=temp->next;
+      }
+      if(temp->next == NULL && strcmp(temp->username,sname) != 0) {
+        printf("USER NOT FOUND..\n");
+      }
+      break;
+    }
+    case 2:{
+      clrscr();
+      if(head==0) printf("NO USER FOUND>>\n");
+      else{
+        temp=head;
+        printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        printf("USERNAME\t\t\t\tNAME\t\t\t\tCONTACT\t\t\t\tADDRESS\n");
+        printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        while(temp->next!=0){
+          printf("%s\t\t\t%s %s\t\t\t\t%s\t\t\t\t%s %s \n",temp->username, temp->ed.fName, temp->ed.lName, temp->ed.contact, temp->ed.city, temp->ed.state);
+          temp=temp->next;
+        }
+      }
+      printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    }
+  }
+  getch();
+}
 void recordBook(){}
 void revenue(){}
 void sessionRecords(){}
@@ -1239,7 +1293,7 @@ void adminLogin() {
     }
   }
   switch(position) {
-    case 1:userList(); break;
+    case 1:userList(head, temp); break;
 
     case 2: recordBook(); break;
 
@@ -1249,7 +1303,7 @@ void adminLogin() {
 
     case 5: usrfeeds(); break;
 
-    case 5: exit(0); break;
+    case 6: exit(0); break;
   }
   getch();
 }
