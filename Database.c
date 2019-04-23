@@ -72,9 +72,7 @@ struct node {
   int routing;
   char mobileno[11];
   struct node*next;
-
 }*ptr,*current, *headi=NULL;
-//***********************************
 
 struct filenode {
   char src[15],desti[15];
@@ -340,6 +338,13 @@ void writeID() {
 
 
 //CalenderFunctions
+#include <stdlib.h>
+#include <stdio.h>
+#include <conio.h>
+#include <time.h>
+#include <windows.h>
+
+
 struct day{
   int dd;
   int mm;
@@ -500,59 +505,69 @@ void printcalender(struct day curr, int x, int y){
   gotoxy(x,y);
   printf("S\t    M\t    T\t    W\t    T\t    F\t    S\n");
   int n=days(month,year);
-  int day=getDayNumber(d,month,year);
-  y++;
-  switch (day) {
-    case 0:{
-      x=x;
-      count=1;
-      break;
+    int day=getDayNumber(d,month,year);
+    y++;
+    switch (day) {
+      case 0:{
+        x=x;
+        count=1;
+        break;
+      }
+      case 1:{
+        x+=8;
+        count=2;
+        break;
+      }
+      case 2:{
+        x+=16;
+        count=3;
+        break;
+      }
+      case 3:{
+        x+=24;
+        count=4;
+        break;
+      }
+      case 4:{
+        x+=32;
+        count=5;
+        break;
+      }
+      case 5:{
+        x+=40;
+        count=6;
+        break;
+      }
+      case 6:{
+        x+=48;
+        count=7;
+        break;
+      }
     }
-    case 1:{
-      x+=8;
-      count=2;
-      break;
-    }
-    case 2:{
-      x+=16;
-      count=3;
-      break;
-    }
-    case 3:{
-      x+=24;
-      count=4;
-      break;
-    }
-    case 4:{
-      x+=32;
-      count=5;
-      break;
-    }
-    case 5:{
-      x+=40;
-      count=6;
-      break;
-    }
-    case 6:{
-      x+=48;
-      count=7;
-      break;
-    }
-  }
-  gotoxy(x,y);
-  printf("%d",d);
-  for(d=2;d<=n;d++){
-    if(count%7==0){
-//      printf("\n" );
-      y++;
-      count=0;
-      x=x1-8;
-    }
-    x=x+8;
     gotoxy(x,y);
-    count++;
-    printf("%d\t",d );
-  }
+    printf("%d",d);
+    for(d=2;d<=n;d++){
+      if(count%7==0){
+  //      printf("\n" );
+        y++;
+        count=0;
+        x=x1-8;
+      }
+      x=x+8;
+      gotoxy(x,y);
+      count++;
+      printf("%d\t",d );
+      if(d==date){
+        a:{
+          gotoxy(x-2,y);
+          printf(">>");
+        }
+        if(GetAsyncKeyState(VK_LEFT)){
+          gotoxy(x+10,y);
+          goto a;
+        }
+      }
+    }
 
   //pointday(n,date);
   gotoxy(8, y+2);
@@ -561,6 +576,7 @@ void printcalender(struct day curr, int x, int y){
 struct day calendermain(){
   char c;
   curr=currentDate();
+  //scanf("%d %d",&date.mm ,&date.yy);
   system("cls");
 
   while(c!='0'){
@@ -577,9 +593,9 @@ struct day calendermain(){
       printcalender(curr,20,5);
       }
     }
-    system("cls");
+  /*  system("cls");
     printf("Enter a date(DD MM YYYY)\n");
-    scanf("%d %d %d",&d.dd, &d.mm, &d.yy);
+    scanf("%d %d %d",&d.dd, &d.mm, &d.yy); */
   return(d);
 }
 
@@ -1216,6 +1232,9 @@ void userList(USER *head, USER* temp){
       while(temp!=NULL) {
         if(strcmp(temp->username,sname) == 0) {
           clrscr();
+          printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+          printf("USERNAME\t\t\t\tNAME\t\t\t\tCONTACT\t\t\t\tADDRESS\n");
+          printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
           printf("%s\t\t\t%s %s\t\t\t\t%s\t\t\t\t%s %s \n",temp->username, temp->ed.fName, temp->ed.lName, temp->ed.contact, temp->ed.city, temp->ed.state);
         }
         temp=temp->next;
@@ -1233,7 +1252,7 @@ void userList(USER *head, USER* temp){
         printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         printf("USERNAME\t\t\t\tNAME\t\t\t\tCONTACT\t\t\t\tADDRESS\n");
         printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        while(temp->next!=0){
+        while(temp!=NULL){
           printf("%s\t\t\t%s %s\t\t\t\t%s\t\t\t\t%s %s \n",temp->username, temp->ed.fName, temp->ed.lName, temp->ed.contact, temp->ed.city, temp->ed.state);
           temp=temp->next;
         }
@@ -1243,7 +1262,97 @@ void userList(USER *head, USER* temp){
   }
   getch();
 }
-void recordBook(){}
+void recordBook(){
+  position = 1; keyPressed = 0;
+  clrscr();
+  while(keyPressed != 13) {
+    clrscr();
+    printf("CHOOSE FROM THE OPTIONS:\n");
+    arrorHere(1, position); printf("1. Flight records\n");
+    arrorHere(2, position); printf("2. Hotel records\n");
+    keyPressed = getch();
+
+    if(keyPressed == 80 && position != 2) {
+      position++;
+    }else if(keyPressed == 72 && position != 1) {
+      position--;
+    }else {
+      position = position;
+    }
+  }
+  switch(position){
+    case 1:{
+      clrscr();
+      temp=head;
+      tempf=headf;
+      if(temp==0){  if(tempf==0){
+          printf("NO FLIGHT RECORDS TO SHOW.\n");
+        }
+      }
+      else{
+        clrscr();
+        temp=head;
+        tempf=headf;
+        printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        printf("TRAVLIZ ID\t\t\t\tNAME\t\t\t\tBOARDIND DATE\t\t\t\tAMOUNT PAID\n" );
+        printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        while(temp!=NULL){
+          tempf = headf;
+          char tname[100];
+          char path[] = "./Source Files/USERS\\";
+          strcpy(tname, path);
+          strcat(tname, temp->username);
+          strcat(tname, ".txt");
+          FILE *fp = fopen(tname, "r");
+          while(tempf != NULL) {
+            fprintf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", tempf->key, tempf->id, tempf->name, tempf->cin_day, tempf->cin_month, tempf->cin_year, tempf->cout_day, tempf->cout_month, tempf->cout_year, tempf->amount);
+            if(tempf->key=='h'){
+            printf("%d\t\t\t\t%s %s\t\t\t\t%d-%d-%d\t\t\t\t%d\n",tempf->id,tempf->name,tempf->cin_day,tempf->cin_month,tempf->cin_year,tempf->amount);
+            }
+           tempf=tempf->next;
+         }
+        fclose(fp);
+          }
+          temp=temp->next;
+        }
+      }
+    }
+    case 2:{
+      clrscr();
+      temp=head;
+      tempf=headf;
+      if(temp==0){
+        if(tempf==0){
+          printf("NO HOTEL RECORDS TO SHOW.\n");
+        }
+      }
+        else{
+        clrscr();
+        temp=head;
+        printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        printf("TRAVLIZ ID\t\t\t\tNAME\t\t\t\tCHECK IN DATE\t\t\t\tCHECK OUT DATE\t\t\t\tAMOUNT PAID\n" );
+        printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        while(temp!=NULL){
+          tempf = headf;
+          char tname[100];
+          char path[] = "./Source Files/USERS\\";
+          strcpy(tname, path);
+          strcat(tname, temp->username);
+          strcat(tname, ".txt");
+          FILE *fp = fopen(tname, "r");
+          while(tempf != NULL) {
+            fprintf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", tempf->key, tempf->id, tempf->name, tempf->cin_day, tempf->cin_month, tempf->cin_year, tempf->cout_day, tempf->cout_month, tempf->cout_year, tempf->amount);
+            if(tempf->key=='h'){
+            printf("%d\t\t\t\t%s %s\t\t\t\t%d-%d-%d\t\t\t\t%d-%d-%d\t\t\t\t%d\n",tempf->id,tempf->name,tempf->cin_day,tempf->cin_month,tempf->cin_year,tempf->cout_day,tempf->cout_month,tempf->cout_year, tempf->amount);
+            }
+           tempf=tempf->next;
+         }
+        fclose(fp);
+        temp=temp->next;
+     }
+   }
+  }
+ }
 void revenue(){}
 void sessionRecords(){}
 void usrfeeds(){}
@@ -1270,42 +1379,48 @@ void fileToList() {
   fclose(fp);
 }
 void adminLogin() {
-  position = 1; keyPressed = 0;
-  clrscr();
-  while(keyPressed != 13) {
+  char aPass[25];
+  printf("ENTER PASSWORD:\n");
+  scanf("%s",aPass);
+  if(strcmp(aPass,"admintravaliz")==0){
+    position = 1; keyPressed = 0;
     clrscr();
-    printf(":::::ADMIN MENU:::::\n");
-    arrorHere(1, position); printf("1. List of users\n");
-    arrorHere(2, position); printf("2. Total Bookings\n");
-    arrorHere(3, position); printf("3. Amount generated \n");
-    arrorHere(4, position); printf("4. Login Session Records\n");
-    arrorHere(5, position); printf("5. Feedbacks\n");
-    //arrorHere(6, position); printf("6. Previous Records\n");
-    arrorHere(6, position); printf("0. Exit\n");
-    keyPressed = getch();
+    while(keyPressed != 13) {
+      clrscr();
+      printf(":::::ADMIN MENU:::::\n");
+      arrorHere(1, position); printf("1. List of users\n");
+      arrorHere(2, position); printf("2. Total Bookings\n");
+      arrorHere(3, position); printf("3. Amount generated \n");
+      arrorHere(4, position); printf("4. Login Session Records\n");
+      arrorHere(5, position); printf("5. Feedbacks\n");
+      //arrorHere(6, position); printf("6. Previous Records\n");
+      arrorHere(6, position); printf("0. Exit\n");
+      keyPressed = getch();
 
-    if(keyPressed == 80 && position != 6) {
-      position++;
-    }else if(keyPressed == 72 && position != 1) {
-      position--;
-    }else {
-      position = position;
+      if(keyPressed == 80 && position != 6) {
+        position++;
+      }else if(keyPressed == 72 && position != 1) {
+        position--;
+      }else {
+        position = position;
+      }
     }
+    switch(position) {
+      case 1:userList(head, temp); break;
+
+      case 2: recordBook(); break;
+
+      case 3: revenue(); break;
+
+      case 4: sessionRecords(); break;
+
+      case 5: usrfeeds(); break;
+
+      case 6: exit(0); break;
+    }
+    getch();
   }
-  switch(position) {
-    case 1:userList(head, temp); break;
-
-    case 2: recordBook(); break;
-
-    case 3: revenue(); break;
-
-    case 4: sessionRecords(); break;
-
-    case 5: usrfeeds(); break;
-
-    case 6: exit(0); break;
-  }
-  getch();
+  else printf("ADMIN PASSWORD INVALID!!\n");
 }
 void createUser() {
   newNode = (USER *)malloc(sizeof(USER));
