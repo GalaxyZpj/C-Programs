@@ -96,6 +96,12 @@ FK *newNodeFK, *headFK = 0, *tempFK = 0, *temp1FK = 0;
 
 
 //FunctionPrototypes
+void userList();
+void recordBook();
+void revenue();
+void sessionRecords();
+void usrfeeds();
+
 void clrscr();
 void currentTime();
 void paymentPortal(int);
@@ -988,7 +994,7 @@ void hotelPrinting(char country[]) {
 }
 void displayPreviousRecords(HK *headHK, HK*tempHK){
   clrscr();
-  if(headHK==0){
+  if(headf==0){
     printf("NO PREVIOUS RECORDS...\n");
   }
   else{
@@ -1181,6 +1187,13 @@ void menu(char mname[]) {
   getch();
 }
 
+//AdminFunctions
+void userList(){}
+void recordBook(){}
+void revenue(){}
+void sessionRecords(){}
+void usrfeeds(){}
+
 
 //LoginIntoDatabaseFunctions
 void fileToList() {
@@ -1203,7 +1216,42 @@ void fileToList() {
   fclose(fp);
 }
 void adminLogin() {
+  position = 1; keyPressed = 0;
+  clrscr();
+  while(keyPressed != 13) {
+    clrscr();
+    printf(":::::ADMIN MENU:::::\n");
+    arrorHere(1, position); printf("1. List of users\n");
+    arrorHere(2, position); printf("2. Total Bookings\n");
+    arrorHere(3, position); printf("3. Amount generated \n");
+    arrorHere(4, position); printf("4. Login Session Records\n");
+    arrorHere(5, position); printf("5. Feedbacks\n");
+    //arrorHere(6, position); printf("6. Previous Records\n");
+    arrorHere(6, position); printf("0. Exit\n");
+    keyPressed = getch();
 
+    if(keyPressed == 80 && position != 6) {
+      position++;
+    }else if(keyPressed == 72 && position != 1) {
+      position--;
+    }else {
+      position = position;
+    }
+  }
+  switch(position) {
+    case 1:userList(); break;
+
+    case 2: recordBook(); break;
+
+    case 3: revenue(); break;
+
+    case 4: sessionRecords(); break;
+
+    case 5: usrfeeds(); break;
+
+    case 5: exit(0); break;
+  }
+  getch();
 }
 void createUser() {
   newNode = (USER *)malloc(sizeof(USER));
