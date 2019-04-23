@@ -1243,10 +1243,10 @@ void userList(USER *head, USER* temp){
   }
   getch();
 }
-void recordBook(){}
-void revenue(){}
-void sessionRecords(){}
-void usrfeeds(){}
+void recordBook() {}
+void revenue() {}
+void sessionRecords() {}
+void usrfeeds() {}
 
 
 //LoginIntoDatabaseFunctions
