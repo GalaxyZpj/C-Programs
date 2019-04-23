@@ -1378,7 +1378,6 @@ void recordBook(){
           temp=temp->next;
         }
       }
-    }
     case 2:{
       clrscr();
       temp=head;
@@ -1411,10 +1410,12 @@ void recordBook(){
          }
         fclose(fp);
         temp=temp->next;
+      }
      }
+    }
    }
-  }
  }
+
 void revenue(){}
 void sessionRecords(){}
 void usrfeeds(){}
