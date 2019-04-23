@@ -622,51 +622,6 @@ void flightRecords(int amount, int tid) {
   fileEntry();
 
 }
-void display() {
-  struct filenode *s=0,*temp=0;
-  system("color 0E");
-  char source [10],destination[15];
-  system("cls");
-
-  printf("For checking the details of available flights,\n\n please enter nearest INTERNATIONAL AIRPORT\n\n\t DELHI->INDIRA GANDHI INTERNATIONAL AIRPORT \n\n\tMUMBAI->CHHATRAPATI SHIVAJI INTERNATIONAL AIRPORT\n\n\tCHENNAI->CHENNAI INTERNATIONAL AIRPORT\n ");
-  printf("Enter source name as DELHI \t / MUMBAI \t /CHENNAI ");
-  scanf("%s",source );
-  printf("*******************************************");
-  system ("cls");
-  system("color 2B");
-  printf("\n\n\n Now enter the destination  \n");
-  printf("choose from the below given list ");
-  printf("\n\nRUSSIA\nUK\nSPAIN\nFRANCE\nTORONTO\nSINGAPORE\nSOUTHKOREA\nEUROPE\nHONGKONG\nDUBAI \n");
-  scanf("%s",destination);
-  printf("*********************************************");
-  system("cls");
-  FILE *f;
-  f=fopen("./Source Files/FLIGHT FILES/details.txt","r");
-//copying the content of file to structure nodes
-  while(!feof(f)) {
-    s=(struct filenode*)malloc(sizeof(struct filenode));
-    fscanf(f,"%s %s %s %d\n",s->src,s->desti,s->flightno,&s->fare);
-    if(headd!=0) {
-      temp->next=s;
-      temp=s;
-    } else {
-      headd=temp=s;
-    }
-  }
-  temp->next=NULL;
-  fclose(f);
-//now extracting the values from these nodes to get desired output
-  temp=headd;
-  while(temp!=0) {
-    if(strcmpi(temp->src,source)==0&&strcmpi(temp->desti,destination)==0) {
-    printf("SOURCE\t\t\tDESTINATION\t\tFLIGHT_NO\t\tFARE\n");
-    printf("%s\t\t\t%s\t\t\t%s\t\t\t%d\t\n",temp->src,temp->desti,temp->flightno,temp->fare);
-    }
-    temp=temp->next;
-  }
-// nested function ->calling confirmation() inside display function
-confirmation();
-}
 void reserve() {
 
   ptr=(struct node*)malloc(sizeof(struct node));
@@ -701,11 +656,16 @@ void reserve() {
   printf("Number of infants(age group below 2)\n\n\n");
   scanf("%d",&ptr->infants);
 
-  printf("Your trip type? ONE WAY or TWO WAY ROUND TRIP \n\n Type 1 for one way trip \n\n 2 for a two way trip\n\n\n");
-  scanf("%d",&ptr->trip_type);
+  printf("Your trip type? ONE WAY or TWO WAY ROUND TRIP \n\n Press 1 for one way trip \n\n       2 for a two way trip\n\n\n");
+  char c;
+  c = getch();
+  ptr->trip_type = (int)(c - '0');
+  //scanf("%d",&ptr->trip_type);
 
-  printf("Tell us about your comfortable routing style\n \nPress 1 for DIRECT FLIGHTS \n\npress 2 for CONNECTING(VIA) FLIGHTS");
-  scanf("%d",&ptr->routing);
+  printf("Tell us about your comfortable routing style\n \nPress 1 for DIRECT FLIGHTS \n\n      2 for CONNECTING(VIA) FLIGHTS\n");
+  char c1;
+  c1 = getch();
+  ptr->routing = (int)(c1 - '0');
 
   ptr->next=NULL;
 
@@ -741,8 +701,7 @@ void reserve() {
 void confirmation() {
   char flno[7];
   int payout;
-  printf("Choose the desired flight from the list \n");
-  printf("enter the flight no");
+  printf("Enter the flight no: ");
   scanf("%s",flno);
 
  struct filenode*ptrr;
@@ -756,8 +715,8 @@ void confirmation() {
     ptrr=ptrr->next;
   }
 system("cls");
-
 reserve();
+
 FILE*f;
 f=fopen("./Source Files/FLIGHT FILES/ticket.txt","r");
 system("color 1F");
@@ -779,6 +738,107 @@ printf("*************************************\n\n\n");
 printf("Your NET payable amount is%d:-\n",payout);
 fclose(f);
 }
+void display() {
+  struct filenode *s=0,*temp=0;
+  //system("color 0E");
+  char source [10],destination[15];
+  position = 1; keyPressed = 0;
+  clrscr();
+  while(keyPressed != 13) {
+    clrscr();
+    printf("For checking the details of available flights,\n\n please choose nearest INTERNATIONAL AIRPORT\n\n\t DELHI->INDIRA GANDHI INTERNATIONAL AIRPORT \n\n\tMUMBAI->CHHATRAPATI SHIVAJI INTERNATIONAL AIRPORT\n\n\tCHENNAI->CHENNAI INTERNATIONAL AIRPORT\n ");
+    printf("*******************************************");
+    printf("CHOOSE FROM THE SOURCES:\n");
+    arrorHere(1, position); printf("1. DELHI\n");
+    arrorHere(2, position); printf("2. MUMBAI\n");
+    arrorHere(3, position); printf("3. CHENNAI\n");
+    keyPressed = getch();
+
+    if(keyPressed == 80 && position != 3) {
+      position++;
+    } else if(keyPressed == 72 && position != 1) {
+        position--;
+      } else {
+        position = position;
+      }
+}
+switch(position) {
+  case 1: strcpy(source, "Delhi"); break;
+  case 2: strcpy(source, "Mumbai"); break;
+  case 3: strcpy(source, "Chennai"); break;
+}
+  position = 1; keyPressed = 0;
+  clrscr();
+  while(keyPressed != 13) {
+    clrscr();
+    printf("\n\n\n Now enter the destination  \n");
+    printf("Choose from the below given list\n");
+    arrorHere(1, position); printf("1. RUSSIA\n");
+    arrorHere(2, position); printf("2. UK\n");
+    arrorHere(3, position); printf("3. SPAIN\n");
+    arrorHere(4, position); printf("4. FRANCE\n");
+    arrorHere(5, position); printf("5. TORONTO\n");
+    arrorHere(6, position); printf("6. SINGAPORE\n");
+    arrorHere(7, position); printf("7. SOUTHKOREA\n");
+    arrorHere(8, position); printf("8. EUROPE\n");
+    arrorHere(9, position); printf("9. HONGKONG\n");
+    arrorHere(10, position); printf("0. DUBAI\n");
+    keyPressed = getch();
+    if(keyPressed == 80 && position != 10) {
+      position++;
+    } else if(keyPressed == 72 && position != 1) {
+        position--;
+    } else {
+        position = position;
+    }
+  }
+switch(position) {
+case 1: strcpy(destination, "Russia"); break;
+case 2: strcpy(destination, "UK"); break;
+case 3: strcpy(destination, "Spain"); break;
+case 4: strcpy(destination, "France"); break;
+case 5: strcpy(destination, "Toronto"); break;
+case 6: strcpy(destination, "Singapore"); break;
+case 7: strcpy(destination, "SouthKorea"); break;
+case 8: strcpy(destination, "Europe"); break;
+case 9: strcpy(destination, "HongKong"); break;
+case 10: strcpy(destination, "Dubai"); break;
+}
+
+  system("cls");
+  FILE *f;
+  f=fopen("./Source Files/FLIGHT FILES/details.txt","r");
+//copying the content of file to structure nodes
+  while(!feof(f)) {
+    s=(struct filenode*)malloc(sizeof(struct filenode));
+    fscanf(f,"%s %s %s %d\n",s->src,s->desti,s->flightno,&s->fare);
+    if(headd!=0) {
+      temp->next=s;
+      temp=s;
+    } else {
+      headd=temp=s;
+    }
+  }
+  temp->next=NULL;
+  fclose(f);
+//now extracting the values from these nodes to get desired output
+  temp=headd;
+  printf("\n\n\nChoose the desired flight from the list:- \n");
+  printf("------------------------------------------------------------------------------------\n");
+  printf("SOURCE\t\t\tDESTINATION\t\tFLIGHT_NO\t\tFARE\n");
+  printf("------------------------------------------------------------------------------------\n");
+  while(temp!=0) {
+    if(strcmpi(temp->src,source)==0&&strcmpi(temp->desti,destination)==0) {
+    printf("%s\t\t\t%s\t\t\t%s\t\t\t%d\t\n",temp->src,temp->desti,temp->flightno,temp->fare);
+    printf("------------------------------------------------------------------------------------\n");
+      }
+    temp=temp->next;
+  }
+// nested function ->calling confirmation() inside display function
+confirmation();
+}
+
+
 
 
 //HotelBooking SubFunctions
