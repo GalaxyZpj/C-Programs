@@ -764,6 +764,7 @@ printf("\n\n*****************************************************\n");
 printf("FlightNO--->>%s\n",flno);
 printf("Total fare--->>%d\n",payout);
 printf("**********************************************************");
+getch();
 
 system("cls");
 printf("*************************************\n");
@@ -1149,9 +1150,10 @@ void menu(char mname[]) {
     arrorHere(4, position); printf("4. Feedback\n");
     arrorHere(5, position); printf("5. About us\n");
     arrorHere(6, position); printf("6. Previous Records\n");
+    arrorHere(7, position); printf("0. Exit\n");
     keyPressed = getch();
 
-    if(keyPressed == 80 && position != 6) {
+    if(keyPressed == 80 && position != 7) {
       position++;
     }else if(keyPressed == 72 && position != 1) {
       position--;
@@ -1171,6 +1173,8 @@ void menu(char mname[]) {
     case 5: aboutUs(); break;
 
     case 6: displayPreviousRecords(headHK, tempHK); break;
+
+    case 7: exit(0); break;
 
     default: printf("Invalid Choice, Press any key to try again.\n"); getchar(); menu(mname);
   }

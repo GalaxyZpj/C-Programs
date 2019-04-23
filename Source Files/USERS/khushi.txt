@@ -1,3 +1,5 @@
 h 16142369 Renaissance_Paris_Arc_De_Triomphe_Hotel 20-9-2000 12-10-2000 32486
 h 16142438 Hotel_The_Westin_Palace 11-4-2019 15-4-2019 22094
 h 16142507 Conrad 18-8-2000 27-8-2000 19709
+h 16142576 Hotel_Kowloon_Shangri-La 20-9-2019 28-9-2019 106490
+h 16142645 Hotel_The_Ritz_Carlton 18-4-2019 21-4-2019 40781
