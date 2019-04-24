@@ -337,27 +337,16 @@ void writeID() {
 
 
 //CalenderFunctions
-#include <stdlib.h>
-#include <stdio.h>
-#include <conio.h>
-#include <time.h>
-#include <windows.h>
-
-
-struct day{
+typedef struct day{
   int dd;
   int mm;
   int yy;
-};
-struct day curr;
-struct day d;
-struct day d1;
-struct day d2;
-COORD xy={0,0};
-struct day currentDate() {
+}DAY;
+DAY current, d, d1, d2;
+DAY currentDate() {
   time_t rawtime;
     struct tm*  time_;
-    struct day cdate;
+    DAY cdate;
     time(&rawtime);
     time_ = localtime(&rawtime);
     cdate.dd=time_->tm_mday;
@@ -365,239 +354,66 @@ struct day currentDate() {
     cdate.yy=time_->tm_year+1900;
     return(cdate);
 }
-void gotoxy(int x, int y){
-  xy.X=x;
-  xy.Y=y;
-  SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),xy);
-}
-/*void pointday(int tdays,int date){
-  int i;
-  for(i=0;i<date;i++){
-    if(i==date-1){
-      gotoxy(xpos,ypos);
-      printf("_");
-    }
-  }
-}*/
-void plus(int *month, int *year){
-  ++*month;
-  if(*month>12){
-    ++*year;
-    *month=*month-12;
-  }
-}
-void minus(int *month, int *year){
-    --*month;
-    if(*month<1){
-      --*year;
-      *month=*month+12;
-    }
-}
-int leapyear(int year){
+int checkLeap(int year){
   if(year % 400 ==0||(year % 100 !=0 && year % 4 ==0))
      return(1);
   return(0);
 }
-void printmonth(int month, int year){
-  gotoxy(20,2);
-  printf("-----------------------------------------------------\n" );
-  gotoxy(20,3);
-  printf("-----------------------------------------------------\n" );
-  gotoxy(40,4);
-  printf("%d ",year );
-
-  switch (month) {
-    case 1:printf("JANUARY\n");break;
-    case 2:printf("FEBRAURY\n");break;
-    case 3:printf("MARCH\n");break;
-    case 4:printf("APRIL\n");break;
-    case 5:printf("MAY\n");break;
-    case 6:printf("JUNE\n");break;
-    case 7:printf("JULY\n");break;
-    case 8:printf("AUGUST\n");break;
-    case 9:printf("SEPTEMBER\n");break;
-    case 10:printf("OCTOBER\n");break;
-    case 11:printf("NOVEMBER\n");break;
-    case 12:printf("DECEMBER\n");break;
-
+int verification(DAY vday){
+  int verify=0;
+  current= currentDate();
+  int date= current.dd;
+  int month= current.mm;
+  int year= current.yy;
+  if(vday.dd<date && vday.mm==month && vday.yy==year){
+    printf("DATE ENTER HAS ALREADY BEEN PASSED.\nPLEASE ENTER A VALID DATE\n");
+    return (verify);
   }
-  gotoxy(20,5);
-  printf("-----------------------------------------------------\n" );
-  gotoxy(20,6);
-  printf("-----------------------------------------------------\n" );
-  gotoxy(20,7);
-}
-int days(int month ,int year){
-  switch (month) {
-    case 1: return(31);
-    case 2: if(leapyear(year)==1)
-              return(29);
-            else
-              return(28);
-    case 3: return(31);
-    case 4: return(30);
-    case 5: return(31);
-    case 6: return(30);
-    case 7: return(31);
-    case 8: return(31);
-    case 9: return(30);
-    case 10: return(31);
-    case 11: return(30);
-    case 12: return(31);
-
+  else if((vday.mm<month && vday.yy==year)||(vday.mm==month && vday.yy<year)){
+    printf("DATE ENTER HAS ALREADY BEEN PASSED.\nPLEASE ENTER A VALID DATE\n");
+    return (verify);
   }
-}
-int countdays(struct day d1,struct day d2){
-  int c1=365*(d2.yy-1)+d2.dd;
-  for(int i=0;i<d2.mm-1;i++){
-    c1+=days(d2.mm,d2.yy);
+  else if(vday.mm>12){
+    printf("PLEASE ENTER A VALID DATE\n");
+    return (verify);
   }
-  int c2=365*(d1.yy-1)+d1.dd;
-  for(int i=0;i<d1.mm-1;i++){
-    c2+=days(d1.mm,d1.yy);
-  }
-  return(c1-c2);
-}
-int getDayNumber(int day,int mon,int year){
-    int res = 0, t1, t2, y = year;
-    year = year - 1600;
-    while(year >= 100){
-        res = res + 5;
-        year = year - 100;
+  else if(vday.mm==01 ||vday.mm==03 ||vday.mm==05 ||vday.mm==07 ||vday.mm==07+1 ||vday.mm==10 ||vday.mm==12){
+    if(vday.dd>31){
+       printf("PLEASE ENTER A VALID DATE\n");
+       return (verify);
     }
-    res = (res % 7);
-    t1 = ((year - 1) / 4);
-    t2 = (year-1)-t1;
-    t1 = (t1*2)+t2;
-    t1 = (t1%7);
-    res = res + t1;
-    res = res%7;
-    t2 = 0;
-    for(t1 = 1;t1 < mon; t1++){
-        t2 += days(t1,y);
-    }
-    t2 = t2 + day;
-    t2 = t2 % 7;
-    res = res + t2;
-    res = res % 7;
-    if(y > 2000)
-        res = res + 1;
-    res = res % 7;
-    return res;
-}
-void printcalender(struct day curr, int x, int y){
-  int d=1, count,x1=x;
-  int month=curr.mm;
-  int year=curr.yy;
-  int date=curr.dd;
-  if(month<1 || month >12 ){
-    printf("INVALID MONTH!\n");
-//    break;
   }
-  if(year<1600){
-    printf("INVALID YEAR!\n" );
-//    break;
+  else if(vday.mm==04 || vday.mm==06 || vday.mm==07+2 || vday.mm==11){
+    if(vday.dd>30){
+      printf("ENTER A VALID DATE\n");
+      return (verify);
+    }
   }
-  gotoxy(20,y);
-  printmonth(month,year);
-  y+=4;
-  gotoxy(x,y);
-  printf("S\t    M\t    T\t    W\t    T\t    F\t    S\n");
-  int n=days(month,year);
-    int day=getDayNumber(d,month,year);
-    y++;
-    switch (day) {
-      case 0:{
-        x=x;
-        count=1;
-        break;
-      }
-      case 1:{
-        x+=8;
-        count=2;
-        break;
-      }
-      case 2:{
-        x+=16;
-        count=3;
-        break;
-      }
-      case 3:{
-        x+=24;
-        count=4;
-        break;
-      }
-      case 4:{
-        x+=32;
-        count=5;
-        break;
-      }
-      case 5:{
-        x+=40;
-        count=6;
-        break;
-      }
-      case 6:{
-        x+=48;
-        count=7;
-        break;
-      }
+  else if (vday.mm==02){
+    int leap;
+    leap=checkLeap(vday.yy);
+    if(leap==0 && vday.dd>28){
+      printf("PLEASE ENTER A VALID DATE\n");
+      return (verify);
     }
-    gotoxy(x,y);
-    printf("%d",d);
-    for(d=2;d<=n;d++){
-      if(count%7==0){
-  //      printf("\n" );
-        y++;
-        count=0;
-        x=x1-8;
-      }
-      x=x+8;
-      gotoxy(x,y);
-      count++;
-      printf("%d\t",d );
-      if(d==date){
-        a:{
-          gotoxy(x-2,y);
-          printf(">>");
-        }
-        if(GetAsyncKeyState(VK_LEFT)){
-          gotoxy(x+10,y);
-          goto a;
-        }
-      }
+    if(leap==1 && vday.dd>29){
+      printf("PLEASE ENTER A VALID DATE\n");
+      return (verify);
     }
-
-  //pointday(n,date);
-  gotoxy(8, y+2);
-  printf("\nPress 'UP'  to Next, Press 'DOWN' to Previous and '0' to Quit");
+  }
+  else{
+    verify=1;
+    return (verify);
+  }
 }
-struct day calendermain(){
-  char c;
-  curr=currentDate();
-  //scanf("%d %d",&date.mm ,&date.yy);
-  system("cls");
-
-  while(c!='0'){
-    printcalender(curr,20,5);
-    c=getch();
-    if(GetAsyncKeyState(VK_UP)){
-      plus(&curr.mm,&curr.yy);
-      system("cls");
-      printcalender(curr,20,5);
-      }
-    if(GetAsyncKeyState(VK_DOWN)){
-      minus(&curr.mm,&curr.yy);
-      system("cls");
-      printcalender(curr,20,5);
-      }
-    }
-  /*  system("cls");
-    printf("Enter a date(DD MM YYYY)\n");
-    scanf("%d %d %d",&d.dd, &d.mm, &d.yy); */
-  return(d);
+DAY inputDate(){
+  int v;
+  do{
+    printf("Enter Date (DD MM YYYY)\n");
+    scanf("%d %d %d",&d.dd, &d.mm, &d.yy);
+    v=verification(d);
+  }while(v!=1);
 }
-
 
 //FlightBooking SubFunctions
 void flightRecords(int amount, int tid) {
@@ -1346,75 +1162,65 @@ void recordBook(){
     case 1:{
       clrscr();
       temp=head;
-      tempf=headf;
-      if(temp==0){  if(tempf==0){
+      while(temp!=NULL){
+        tempf = headf;
+        char tname[100];
+        char path[] = "./Source Files/USERS\\";
+        strcpy(tname, path);
+        strcat(tname, temp->username);
+        strcat(tname, ".txt");
+        FILE *fp = fopen(tname, "r");
+        if(tempf==0){
           printf("NO FLIGHT RECORDS TO SHOW.\n");
         }
-      }
-      else{
-        clrscr();
-        temp=head;
-        tempf=headf;
-        printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        printf("TRAVLIZ ID\t\t\t\tNAME\t\t\t\tBOARDIND DATE\t\t\t\tAMOUNT PAID\n" );
-        printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        while(temp!=NULL){
-          tempf = headf;
-          char tname[100];
-          char path[] = "./Source Files/USERS\\";
-          strcpy(tname, path);
-          strcat(tname, temp->username);
-          strcat(tname, ".txt");
-          FILE *fp = fopen(tname, "r");
+        else{
+          printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+          printf("TRAVLIZ ID\t\t\t\tNAME\t\t\t\tBOARDIND DATE\t\t\t\tAMOUNT PAID\n" );
+          printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
           while(tempf != NULL) {
             fprintf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", tempf->key, tempf->id, tempf->name, tempf->cin_day, tempf->cin_month, tempf->cin_year, tempf->cout_day, tempf->cout_month, tempf->cout_year, tempf->amount);
-            if(tempf->key=='h'){
+            if(tempf->key=='f'){
             printf("%d\t\t\t\t%s %s\t\t\t\t%d-%d-%d\t\t\t\t%d\n",tempf->id,tempf->name,tempf->cin_day,tempf->cin_month,tempf->cin_year,tempf->amount);
             }
            tempf=tempf->next;
-         }
-        fclose(fp);
           }
-          temp=temp->next;
+        }
+        fclose(fp);
+        temp=temp->next;
         }
       }
     case 2:{
       clrscr();
       temp=head;
-      tempf=headf;
-      if(temp==0){
+      while(temp!=NULL){
+        tempf = headf;
+        char tname[100];
+        char path[] = "./Source Files/USERS\\";
+        strcpy(tname, path);
+        strcat(tname, temp->username);
+        strcat(tname, ".txt");
+        FILE *fp = fopen(tname, "r");
         if(tempf==0){
           printf("NO HOTEL RECORDS TO SHOW.\n");
         }
-      }
         else{
-        clrscr();
-        temp=head;
-        printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        printf("TRAVLIZ ID\t\t\t\tNAME\t\t\t\tCHECK IN DATE\t\t\t\tCHECK OUT DATE\t\t\t\tAMOUNT PAID\n" );
-        printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        while(temp!=NULL){
-          tempf = headf;
-          char tname[100];
-          char path[] = "./Source Files/USERS\\";
-          strcpy(tname, path);
-          strcat(tname, temp->username);
-          strcat(tname, ".txt");
-          FILE *fp = fopen(tname, "r");
+          printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+          printf("TRAVLIZ ID\t\t\t\tNAME\t\t\t\tCHECK IN DATE\t\t\t\tCHECK OUT DATE\t\t\t\tAMOUNT PAID\n" );
+          printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
           while(tempf != NULL) {
             fprintf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", tempf->key, tempf->id, tempf->name, tempf->cin_day, tempf->cin_month, tempf->cin_year, tempf->cout_day, tempf->cout_month, tempf->cout_year, tempf->amount);
             if(tempf->key=='h'){
             printf("%d\t\t\t\t%s %s\t\t\t\t%d-%d-%d\t\t\t\t%d-%d-%d\t\t\t\t%d\n",tempf->id,tempf->name,tempf->cin_day,tempf->cin_month,tempf->cin_year,tempf->cout_day,tempf->cout_month,tempf->cout_year, tempf->amount);
             }
            tempf=tempf->next;
-         }
+          }
+        }
         fclose(fp);
         temp=temp->next;
       }
-     }
     }
-   }
- }
+  }
+}
 
 void revenue(){}
 void sessionRecords(){}
