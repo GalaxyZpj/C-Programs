@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <conio.h>
 //
-int ID_init, hcount = 0, fcount = 0;
+int ID_init, hcount = 0, fcount = 0;  char flno[7];
 
 //Linked Lists for the Program
 typedef struct user {
@@ -79,7 +79,7 @@ struct filenode {
   char flightno[7];
   int fare ;
   struct filenode*next;
-}*headd=NULL;
+}*headd=NULL, *ptrr=NULL;
 
 typedef struct fbook {
   char key;
@@ -189,8 +189,6 @@ void paymentPortal(int amount) {
   else {
     paymentPortal(amount);
   }
-
-
 }
 void arrorHere(int realPosition, int arrowPosition) {
   if(realPosition == arrowPosition) {
@@ -346,6 +344,7 @@ struct day curr;
 struct day d;
 struct day d1;
 struct day d2;
+struct day df;
 COORD xy={0,0};
 struct day currentDate() {
   time_t rawtime;
@@ -597,16 +596,15 @@ void flightRecords(int amount, int tid) {
   newNodef = (UFILE *)malloc(sizeof(UFILE));
   newNodeFK->key = newNodef->key = 'f';
   newNodeFK->id  = newNodef->id = tid;
-  strcpy(newNodeFK->name, tempH1->name);
-  strcpy(newNodef->name, tempH1->name);
-  newNodeFK->cin_day  = newNodef->cin_day = d1.dd;
-  newNodeFK->cin_month  = newNodef->cin_month = d1.mm;
-  newNodeFK->cin_year  = newNodef->cin_year  = d1.yy;
-  newNodeFK->cout_day  = newNodef->cout_day  = d2.dd;
-  newNodeFK->cout_month  = newNodef->cout_month = d2.mm;
-  newNodeFK->cout_year  = newNodef->cout_year  = d2.yy;
+  strcpy(newNodeFK->name, flno);
+  strcpy(newNodef->name, flno);
+  newNodeFK->cin_day  = newNodef->cin_day = df.dd;//d1.dd;
+  newNodeFK->cin_month  = newNodef->cin_month = df.mm;//d1.mm;
+  newNodeFK->cin_year  = newNodef->cin_year  = df.yy;//d1.yy;
+  newNodeFK->cout_day  = newNodef->cout_day  = 0;
+  newNodeFK->cout_month  = newNodef->cout_month = 0;
+  newNodeFK->cout_year  = newNodef->cout_year  = 0;
   newNodeFK->amount  = newNodef->amount  = amount;
-
   if(headFK != 0) {
     tempFK->next = newNodeFK;
     tempFK = newNodeFK;
@@ -617,6 +615,10 @@ void flightRecords(int amount, int tid) {
   tempFK->next = NULL;
 
   if(headf != 0) {
+    tempf = headf;
+    while(tempf->next != NULL) {
+      tempf = tempf->next;
+    }
     tempf->next = newNodef;
     tempf = newNodef;
   }
@@ -625,9 +627,7 @@ void flightRecords(int amount, int tid) {
   }
   tempf->next = NULL;
   clrscr();
-  //printf("\n:::BOOKING DETAILS:::\n");
   fileEntry();
-
 }
 void reserve() {
 
@@ -701,62 +701,60 @@ void reserve() {
   fclose(fp);
 }
 void confirmation() {
-  char flno[7];
+
   int payout;
   printf("Enter the flight no: ");
   scanf("%s",flno);
-
- struct filenode*ptrr;
- ptrr=headd;
-  while(ptrr!=0)
-  {
-    if(strcmp(ptrr->flightno,flno)==0)
-    {
+  ptrr=headd;
+  while(ptrr!=0) {
+    if(strcmp(ptrr->flightno,flno)==0) {
       payout=ptrr->fare;
     }
     ptrr=ptrr->next;
   }
-system("cls");
-reserve();
+  df = calendermain();
+  system("cls");
+  reserve();
 
-FILE*f;
-f=fopen("./Source Files/FLIGHT FILES/ticket.txt","r");
-system("color 1F");
-while(!feof(f)) {
-  fscanf(f,"NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,&ptr->clas,&ptr->adults,&ptr->children,&ptr->infants,&ptr->trip_type,&ptr->routing);
-}
-
-keyPressed = 0; position = 1;
-while(keyPressed != 13) {
-  clrscr();
-  printf("\n\n\n\t\t\t\tTICKET\n\n\n");
-  printf("NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
-  printf("\n\n*****************************************************\n");
-  printf("FlightNO--->>%s\n",flno);
-  printf("Total fare--->>%d\n",payout);
-  printf("**********************************************************\n");
-  printf("\nProceed for the payment:-\n");
-  arrorHere(1, position); printf("  YES\n");
-  arrorHere(2, position); printf("  NO\n");
-  keyPressed = getch();
-  if(keyPressed == 80 && position != 2) {
-    position++;
-  }else if(keyPressed == 72 && position != 1) {
-    position--;
-  }else {
-    position = position;
+  FILE*f;
+  f=fopen("./Source Files/FLIGHT FILES/ticket.txt","r");
+  system("color 1F");
+  while(!feof(f)) {
+    fscanf(f,"NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,&ptr->clas,&ptr->adults,&ptr->children,&ptr->infants,&ptr->trip_type,&ptr->routing);
   }
-}
+
+  keyPressed = 0; position = 1;
+  while(keyPressed != 13) {
+    clrscr();
+    printf("\n\n\n\t\t\t\tTICKET\n\n\n");
+    printf("NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
+    printf("\n\n*****************************************************\n");
+    printf("FlightNO--->>%s\n",flno);
+    printf("Total fare--->>%d\n",payout);
+    printf("**********************************************************\n");
+    printf("\nProceed for the payment:-\n");
+    arrorHere(1, position); printf("  YES\n");
+    arrorHere(2, position); printf("  NO\n");
+    keyPressed = getch();
+    if(keyPressed == 80 && position != 2) {
+      position++;
+    }else if(keyPressed == 72 && position != 1) {
+      position--;
+    }else {
+      position = position;
+    }
+  }
   switch(position) {
     case 1: paymentPortal(payout); break;
     case 2: display(); break;
   }
-system("cls");
-printf("*************************************\n");
-printf("*     BOOKING SUCCESSFULLY DONE!!   *\n");
-printf("*************************************\n\n\n");
-printf("Your NET payable amount is%d:-\n",payout);
-fclose(f);
+  flightRecords(payout, ID_init);
+  system("cls");
+  printf("*************************************\n");
+  printf("*     BOOKING SUCCESSFULLY DONE!!   *\n");
+  printf("*************************************\n\n\n");
+  printf("Your NET payable amount is%d:-\n",payout);
+  fclose(f);
 }
 void display() {
   freeFilenode();
@@ -1615,12 +1613,6 @@ void userPortal() {
 
 int main() {
   fileToList();
-//  temp = head;
-/*  while(temp != NULL) {
-    printf("%s %s %s %s %d %d %d %s %s %s\n", temp->username, temp->password, temp->ed.fName, temp->ed.lName,
-     temp->ed.eb.day, temp->ed.eb.month, temp->ed.eb.year, temp->ed.contact, temp->ed.state, temp->ed.city);
-     temp = temp->next;
-  }*/
   system("COLOR F0");
   userPortal();
   return 0;
