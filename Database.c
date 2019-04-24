@@ -135,7 +135,6 @@ void displayPreviousRecords(HK *headHK, HK*tempHK);
 
 void flightBooking();
 void hotelBooking();
-void emergencyEnquiry();
 void feedback();
 void aboutUs();
 
@@ -496,69 +495,59 @@ void printcalender(struct day curr, int x, int y){
   gotoxy(x,y);
   printf("S\t    M\t    T\t    W\t    T\t    F\t    S\n");
   int n=days(month,year);
-    int day=getDayNumber(d,month,year);
-    y++;
-    switch (day) {
-      case 0:{
-        x=x;
-        count=1;
-        break;
-      }
-      case 1:{
-        x+=8;
-        count=2;
-        break;
-      }
-      case 2:{
-        x+=16;
-        count=3;
-        break;
-      }
-      case 3:{
-        x+=24;
-        count=4;
-        break;
-      }
-      case 4:{
-        x+=32;
-        count=5;
-        break;
-      }
-      case 5:{
-        x+=40;
-        count=6;
-        break;
-      }
-      case 6:{
-        x+=48;
-        count=7;
-        break;
-      }
+  int day=getDayNumber(d,month,year);
+  y++;
+  switch (day) {
+    case 0:{
+      x=x;
+      count=1;
+      break;
     }
+    case 1:{
+      x+=8;
+      count=2;
+      break;
+    }
+    case 2:{
+      x+=16;
+      count=3;
+      break;
+    }
+    case 3:{
+      x+=24;
+      count=4;
+      break;
+    }
+    case 4:{
+      x+=32;
+      count=5;
+      break;
+    }
+    case 5:{
+      x+=40;
+      count=6;
+      break;
+    }
+    case 6:{
+      x+=48;
+      count=7;
+      break;
+    }
+  }
+  gotoxy(x,y);
+  printf("%d",d);
+  for(d=2;d<=n;d++){
+    if(count%7==0){
+//      printf("\n" );
+      y++;
+      count=0;
+      x=x1-8;
+    }
+    x=x+8;
     gotoxy(x,y);
-    printf("%d",d);
-    for(d=2;d<=n;d++){
-      if(count%7==0){
-  //      printf("\n" );
-        y++;
-        count=0;
-        x=x1-8;
-      }
-      x=x+8;
-      gotoxy(x,y);
-      count++;
-      printf("%d\t",d );
-      if(d==date){
-        a:{
-          gotoxy(x-2,y);
-          printf(">>");
-        }
-        if(GetAsyncKeyState(VK_LEFT)){
-          gotoxy(x+10,y);
-          goto a;
-        }
-      }
-    }
+    count++;
+    printf("%d\t",d );
+  }
 
   //pointday(n,date);
   gotoxy(8, y+2);
@@ -567,7 +556,6 @@ void printcalender(struct day curr, int x, int y){
 struct day calendermain(){
   char c;
   curr=currentDate();
-  //scanf("%d %d",&date.mm ,&date.yy);
   system("cls");
 
   while(c!='0'){
@@ -584,9 +572,9 @@ struct day calendermain(){
       printcalender(curr,20,5);
       }
     }
-  /*  system("cls");
+    system("cls");
     printf("Enter a date(DD MM YYYY)\n");
-    scanf("%d %d %d",&d.dd, &d.mm, &d.yy); */
+    scanf("%d %d %d",&d.dd, &d.mm, &d.yy);
   return(d);
 }
 
@@ -1150,9 +1138,6 @@ void hotelBooking() {
   }
   getch();
 }
-void emergencyEnquiry() {
-
-}
 void feedback() {
   clrscr();
   char fback[1000];
@@ -1231,19 +1216,17 @@ void menu(char mname[]) {
     printf("-------------------------------------------------------------------------------------------------\n");
     arrorHere(2, position); printf("2. Hotel Booking\n");
     printf("-------------------------------------------------------------------------------------------------\n");
-    arrorHere(3, position); printf("3. Emergency Enquiry\n");
+    arrorHere(3, position); printf("3. Feedback\n");
     printf("-------------------------------------------------------------------------------------------------\n");
-    arrorHere(4, position); printf("4. Feedback\n");
+    arrorHere(4, position); printf("4. About us\n");
     printf("-------------------------------------------------------------------------------------------------\n");
-    arrorHere(5, position); printf("5. About us\n");
+    arrorHere(5, position); printf("5. Previous Records\n");
     printf("-------------------------------------------------------------------------------------------------\n");
-    arrorHere(6, position); printf("6. Previous Records\n");
-    printf("-------------------------------------------------------------------------------------------------\n");
-    arrorHere(7, position); printf("0. Exit\n");
+    arrorHere(6, position); printf("0. Exit\n");
     printf("-------------------------------------------------------------------------------------------------\n");
     keyPressed = getch();
 
-    if(keyPressed == 80 && position != 7) {
+    if(keyPressed == 80 && position != 6) {
       position++;
     }else if(keyPressed == 72 && position != 1) {
       position--;
@@ -1253,22 +1236,12 @@ void menu(char mname[]) {
   }
   switch(position) {
     case 1:flightBooking(); break;
-
     case 2: hotelBooking(); break;
-
-    case 3: emergencyEnquiry(); break;
-
-    case 4: feedback(); break;
-
-    case 5: aboutUs(); break;
-
-    case 6: displayPreviousRecords(headHK, tempHK); break;
-
-    case 7: exit(0); break;
-
-    default: printf("Invalid Choice, Press any key to try again.\n"); getchar(); menu(mname);
+    case 3: feedback(); break;
+    case 4: aboutUs(); break;
+    case 5: displayPreviousRecords(headHK, tempHK); break;
+    case 6: exit(0); break;
   }
-  getch();
 }
 
 //AdminFunctions
