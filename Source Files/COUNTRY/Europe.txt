@@ -6,7 +6,7 @@ QueenBed 8000
 KingBed 10000
 Suite 17000
 Sun_Gardens_Dubrovnik Dubrovnik 14460
-Single 2000
+SSingle 2000
 Twin 3000
 Quad 5000
 QueenBed 8000
