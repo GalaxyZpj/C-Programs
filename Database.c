@@ -381,7 +381,7 @@ int verification(DAY vday){
     printf("DATE ENTERD HAS BEEN PASSED.\nPLEASE ENTER A VALID\n");
     return (1);
   }
-  if(vday.yy < year){
+  if(vday.yy >= year){
     if(vday.mm >= 1 && vday.mm <=12){
       if((vday.dd >=1 && vday.dd <=31) &&(vday.mm ==1 || vday.mm ==3 || vday.mm ==5 || vday.mm ==7 || vday.mm ==8 || vday.mm ==10 || vday.mm ==12)){
         return (0);
