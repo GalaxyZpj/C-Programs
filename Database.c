@@ -910,9 +910,12 @@ void hotelRecords(int amount, int tid) {
     headf = tempf = newNodef;
   }
   clrscr();
-  //printf("\n:::BOOKING DETAILS:::\n");
+  printf("\n:::BOOKING DETAILS:::\n");
   fileEntry();
-
+  printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
+  printf("Transaction ID\t\t\t\t Name\t\t\t\t Check In Date\t\t\t\t Check Out Date\t\t\t\t Amount\n" );
+  printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
+  printf("%d\t\t\t\t %s\t\t\t\t %d-%d-%d\t\t\t\t %d-%d-%d\t\t\t\t %d\n",tid, tempH1->name, d1.dd,d1.mm,d1.yy,d2.dd,d2.mm,d2.yy,amount );
 }
 void hotelFinalizing(HOTEL *op) {
   clrscr();
