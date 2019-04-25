@@ -4,11 +4,9 @@
 #include <time.h>
 #include <windows.h>
 #include <conio.h>
-//
+
 int ID_init, totalRevenue, hcount = 0, fcount = 0;  char flno[7];
 char source [10],destination[15];
-
-
 
 //Linked Lists for the Program
 typedef struct user {
@@ -41,6 +39,13 @@ typedef struct ufile {
 }UFILE;
 UFILE *newNodef, *headf = 0, *tempf = 0, *temp1f = 0;
 
+//Calender's
+typedef struct day{
+  int dd;
+  int mm;
+  int yy;
+}DAY;
+
 //Hotel's
 typedef struct hotel {
   char name[50], location[50]; int avgFare, no;
@@ -62,7 +67,6 @@ typedef struct hbook {
   struct hbook *next;
 }HK;
 HK *newNodeHK, *headHK = 0, *tempHK = 0, *temp1HK = 0;
-
 
 //Flight's
 struct node {
@@ -109,6 +113,18 @@ void freeFilenode();
 void scanID();
 void writeID();
 
+void gotoxy(int x, int y);
+void plus(int *month, int *year);
+void minus(int *month, int *year);
+int checkLeap(int year);
+int verification(DAY vday);
+void printmonth(int month, int year);
+int days(int month ,int year);
+int countdays(struct day d1,struct day d2);
+int getDayNumber(int day,int mon,int year);
+void printcalender(struct day curr, int x, int y);
+DAY calendermain();
+
 void flightRecords(int amount, int tid);
 void display();
 void reserve();
@@ -138,7 +154,6 @@ void createUser();
 void loginCheck(char uname[], char upass[]);
 void login();
 void userPortal();
-
 
 
 //MiscelleneousFunctions
@@ -332,13 +347,7 @@ void writeID() {
 
 //CalenderFunctions
 int v=1;
-typedef struct day{
-  int dd;
-  int mm;
-  int yy;
-}DAY;
 DAY curr, d, d1, d2 ,df;
-
 COORD xy={0,0};
 DAY currentDate() {
   time_t rawtime;
@@ -1003,7 +1012,7 @@ void hotelFinalizing(HOTEL *op) {
   keyPressed = 0; position = 1;
   while(keyPressed != 13) {
     clrscr();
-    printf("\n\t\t\t\t\t\t\t\t\t\t<<<<<Summary >>>>>\n\n");
+    printf("\n\t\t\t\t\t\t\t\t\t\t<<<<< Summary >>>>>\n\n");
     printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     printf("  FARE\t\t\t\t\t\t\t\tNAME\t\t\t\t\t  CHECKIN\t\t\t\t\t\t   CHECKOUT\n");
     printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
