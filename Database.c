@@ -1213,7 +1213,7 @@ void aboutUs() {
  printf("_______________\n");
  printf("\t\tABOUT US");
  printf("_______________\n\n");
- printf("Provides 24");
+ printf("\nThe leading player in online flight bookings in India, TRAVELISTA offers  some of the lowest airfares, exclusive discounts and a seamless online booking experience. \nFlight and hotel  bookings through the desktop or mobile site is a delightfully customer friendly experience,\n and with just a few clicks you can complete your booking\nBook your flights tickets with India's leading flight booking company. While booking flights with TRAVELISTA, you can expect the ultimate online booking experience.\n With premium customer service, 24/7 dedicated helpline for support, and over 5 million delighted customers, TRAVELISTA takes great pride in enabling customer satisfaction.\n With a cheapest flight guarantee, book your tickets at the lowest airfares. \nAvail great offers, exclusive deals for loyal customers and get instant updates for your flight status and fare drops.");
  printf("\n_________________________________________________\n");
 
 
