@@ -328,13 +328,12 @@ void writeID() {
 
 
 //CalenderFunctions
-int v=1;
 typedef struct day{
   int dd;
   int mm;
   int yy;
 }DAY;
-DAY curr, d, d1, d2 ,df;
+DAY curr, d, d1, d2 ,df, start, end;
 
 COORD xy={0,0};
 DAY currentDate() {
@@ -353,15 +352,6 @@ void gotoxy(int x, int y){
   xy.Y=y;
   SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),xy);
 }
-/*void pointday(int tdays,int date){
-  int i;
-  for(i=0;i<date;i++){
-    if(i==date-1){
-      gotoxy(xpos,ypos);
-      printf("_");
-    }
-  }
-}*/
 void plus(int *month, int *year){
   ++*month;
   if(*month>12){
@@ -387,41 +377,39 @@ int verification(DAY vday){
   int month= curr.mm;
   int year= curr.yy;
   if((vday.dd < date && vday.mm == month && vday.yy==year) || (vday.mm==month && vday.yy < year) || (vday.mm < month && vday.yy == year)){
-    printf("DATE ENTERD HAS BEEN PASSES.\nPLEASE ENTER A VALID\n");
+    printf("DATE ENTERD HAS BEEN PASSED.\nPLEASE ENTER A VALID\n");
     return (1);
   }
-  if(vday.mm >= 1 && vday.mm <=12){
-    if((vday.dd >=1 && vday.dd <=31) &&(vday.mm ==1 || vday.mm ==3 || vday.mm ==5 || vday.mm ==7 || vday.mm ==8 || vday.mm ==10 || vday.mm ==12)){
-      return (0);
-    }
-    if((vday.dd >=1 && vday.dd <=30) &&(vday.mm ==4 || vday.mm ==6 || vday.mm ==9 || vday.mm ==11)){
-      return (0);
-    }
-    if(vday.mm==2){
-      int leap= checkLeap(vday.yy);
-      if(vday.dd>=1 && vday.dd<=29 && leap==1){
+  if(vday.yy < year){
+    if(vday.mm >= 1 && vday.mm <=12){
+      if((vday.dd >=1 && vday.dd <=31) &&(vday.mm ==1 || vday.mm ==3 || vday.mm ==5 || vday.mm ==7 || vday.mm ==8 || vday.mm ==10 || vday.mm ==12)){
         return (0);
       }
-      else{
-        printf("PLEASE ENTER A VALID DATE\n");
-        return (1);
+      if((vday.dd >=1 && vday.dd <=30) &&(vday.mm ==4 || vday.mm ==6 || vday.mm ==9 || vday.mm ==11)){
+        return (0);
       }
+      if(vday.mm==2){
+        int leap= checkLeap(vday.yy);
+        if(vday.dd>=1 && vday.dd<=29 && leap==1){
+          return (0);
+        }
+        else{
+          printf("PLEASE ENTER A VALID DATE\n");
+          return (1);
+        }
+      }
+    }
+    else{
+      printf("PLEASE ENTER A VALID DATE\n" );
+      return (1);
     }
   }
   else{
-    printf("PLEASE ENTER A VALID DATE\n" );
+    printf("PLEASE ENTER A VALID DATE\n");
     return (1);
   }
+
 }
-/*DAY inputDate(){
-//  int v=1;
-  while(v){
-    printf("\nEnter Date (DD MM YYYY)\n");
-    scanf("%d %d %d",&d.dd, &d.mm, &d.yy);
-    v=verification(d);
-  }
-  return (d);
-}*/
 void printmonth(int month, int year){
   gotoxy(20,2);
   printf("-----------------------------------------------------\n" );
@@ -586,15 +574,15 @@ void printcalender(struct day curr, int x, int y){
         }
       }
   //pointday(n,date);
-  gotoxy(8, y+2);
-  printf("CALENDER ONLY FOR WEEK DAY REFERENCE\n");
+  gotoxy(20, y+2);
+  printf("CALENDER  FOR WEEK DAY REFERENCE\n");
   gotoxy(8,y+4);
   printf("\nPress 'RIGHT'  to Next, Press 'LEFT' to Previous and '0' to Enter Date");
 }
 DAY calendermain(){
+  int v=1;
   char c;
   curr=currentDate();
-  //scanf("%d %d",&date.mm ,&date.yy);
   system("cls");
 
   while(c!='0'){
@@ -614,17 +602,12 @@ DAY calendermain(){
       fflush(stdin);
       }
     }
-    if(c=='0'){
       while(v){
         printf("\nEnter Date (DD MM YYYY)\n");
         scanf("%d %d %d",&d.dd, &d.mm, &d.yy);
         v=verification(d);
       }
       return (d);
-    }
-  /*  system("cls");
-    printf("Enter a date(DD MM YYYY)\n");
-    scanf("%d %d %d",&d.dd, &d.mm, &d.yy); */
 }
 
 //FlightBooking SubFunctions
@@ -976,12 +959,12 @@ void hotelFinalizing(HOTEL *op) {
     default: printf("Invalid choice, press any key to try again."); getch(); hotelFinalizing(op);
   }
   printf("Choose checkin date: \n");
-  d1 = calendermain();
+ start = calendermain();
 
   printf("Choose checkout date: \n");
-  d2 = calendermain();
+  end = calendermain();
 
-  nights = countdays(d1, d2);
+  nights = countdays(start, end);
   days = nights + 1;
   tprice = op->avgFare + (price * days);
   keyPressed = 0; position = 1;
