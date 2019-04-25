@@ -334,7 +334,7 @@ typedef struct day{
   int mm;
   int yy;
 }DAY;
-DAY current, d, d1, d2 ,start;
+DAY curr, d, d1, d2 ,df;
 
 COORD xy={0,0};
 DAY currentDate() {
@@ -382,10 +382,10 @@ int checkLeap(int year){
   return(0);
 }
 int verification(DAY vday){
-  current= currentDate();
-  int date= current.dd;
-  int month= current.mm;
-  int year= current.yy;
+  curr= currentDate();
+  int date= curr.dd;
+  int month= curr.mm;
+  int year= curr.yy;
   if((vday.dd < date && vday.mm == month && vday.yy==year) || (vday.mm==month && vday.yy < year) || (vday.mm < month && vday.yy == year)){
     printf("DATE ENTERD HAS BEEN PASSES.\nPLEASE ENTER A VALID\n");
     return (1);
@@ -511,9 +511,9 @@ int getDayNumber(int day,int mon,int year){
 }
 void printcalender(struct day curr, int x, int y){
   int d=1, count,x1=x;
-  int month=current.mm;
-  int year=current.yy;
-  int date=current.dd;
+  int month=curr.mm;
+  int year=curr.yy;
+  int date=curr.dd;
   if(month<1 || month >12 ){
     printf("INVALID MONTH!\n");
 //    break;
@@ -593,24 +593,24 @@ void printcalender(struct day curr, int x, int y){
 }
 DAY calendermain(){
   char c;
-  current=currentDate();
+  curr=currentDate();
   //scanf("%d %d",&date.mm ,&date.yy);
   system("cls");
 
   while(c!='0'){
-    printcalender(current,20,5);
+    printcalender(curr,20,5);
     c=getch();
     fflush(stdin);
     if(GetAsyncKeyState(VK_RIGHT)){
-      plus(&current.mm,&current.yy);
+      plus(&curr.mm,&curr.yy);
       system("cls");
-      printcalender(current,20,5);
+      printcalender(curr,20,5);
       fflush(stdin);
       }
     if(GetAsyncKeyState(VK_LEFT)){
-      minus(&current.mm,&current.yy);
+      minus(&curr.mm,&curr.yy);
       system("cls");
-      printcalender(current,20,5);
+      printcalender(curr,20,5);
       fflush(stdin);
       }
     }
