@@ -6,6 +6,9 @@
 #include <conio.h>
 //
 int ID_init, totalRevenue, hcount = 0, fcount = 0;  char flno[7];
+char source [10],destination[15];
+
+
 
 //Linked Lists for the Program
 typedef struct user {
@@ -666,12 +669,11 @@ void reserve() {
         }
       }while(strlen(ptr->mobileno)!=10);
 
-  printf("\t\tchoose the class(Press the corresponding number ) :-\n1)bussiness\t2)economy\t3)premium economy\n \n");
-  scanf("%d",&ptr->clas);
+
     system("cls");
 
   printf("\n\t\t\t**************************************************\n");
-  printf("\t\t\tnow please enter the details of the traveller(s)\n" );                     //column wise representation
+  printf("\t\t\t  Enter the details of the traveller(s)\n" );
   printf("\t\t\t**************************************************\n\n");
 
 
@@ -683,13 +685,25 @@ void reserve() {
 
   printf("Number of infants(age group below 2)\n");
   scanf("%d",&ptr->infants);
-  printf("Your trip type? ONE WAY or TWO WAY ROUND TRIP \n\n Press 1 for one way trip \n\n       2 for a two way trip\n\n\n");
+
+  system("cls");
+
+  printf("\n\t\t\t**************************************************\n");
+  printf("\t\t\t  Enter the Routing details\n" );
+  printf("\t\t\t**************************************************\n\n");
+
+
+  printf("\t\tchoose the class(Press the corresponding number ) :- \n");
+  printf("\n1)bussiness\t2)economy\t3)premium economy\n\n");
+  scanf("%d",&ptr->clas);
+  printf("\n**************************************************\n");
+  printf("Your trip type? ONE WAY or TWO WAY ROUND TRIP \n\n Press 1 for one way trip \n\n     Press 2 for a two way trip\n\n");
   char c;
   c = getch();
   ptr->trip_type = (int)(c - '0');
   //scanf("%d",&ptr->trip_type);
-
-  printf("Tell us about your comfortable routing style\n \nPress 1 for DIRECT FLIGHTS \n\n      2 for CONNECTING(VIA) FLIGHTS\n");
+  printf("****************************************************\n");
+  printf("Tell us about your comfortable routing style\n \nPress 1 for DIRECT FLIGHTS \n\n   Press 2 for CONNECTING(VIA) FLIGHTS\n");
   char c1;
   c1 = getch();
   ptr->routing = (int)(c1 - '0');
@@ -732,7 +746,6 @@ void confirmation() {
     }
     ptrr=ptrr->next;
   }
-  df = calendermain();
   system("cls");
   reserve();
 
@@ -767,6 +780,9 @@ void confirmation() {
   printf("\n\n\n\t\t\t\tTICKET\n\n\n");
   printf("NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
   printf("FlightNO--->>%s\n",flno);
+  printf("Source--->%s\n",source);
+  printf("Destination--->%s\n",destination);
+  printf("Booking Date--->%d-%d-%d\n", df.dd, df.mm, df.yy);
   printf("Press any key to continue...");
   getch();
   flightRecords(payout, ID_init);
@@ -774,10 +790,11 @@ void confirmation() {
   fclose(f);
 }
 void display() {
+
   freeFilenode();
   struct filenode *s=0,*temp=0;
   //system("color 0E");
-  char source [10],destination[15];
+
   position = 1; keyPressed = 0;
   clrscr();
   while(keyPressed != 13) {
@@ -842,6 +859,16 @@ case 10: strcpy(destination, "Dubai"); break;
 }
 
   system("cls");
+
+  printf(" select Booking  date from the calender");
+  getch();
+
+
+  system("cls");
+  df=calendermain();
+
+
+
   FILE *f;
   f=fopen("./Source Files/FLIGHT FILES/details.txt","r");
 //copying the content of file to structure nodes
@@ -859,6 +886,7 @@ case 10: strcpy(destination, "Dubai"); break;
   fclose(f);
 //now extracting the values from these nodes to get desired output
   temp=headd;
+  system("cls");
   printf("\n\n\nChoose the desired flight from the list:- \n");
   printf("------------------------------------------------------------------------------------\n");
   printf("SOURCE\t\t\tDESTINATION\t\tFLIGHT_NO\t\tFARE\n");
@@ -1184,19 +1212,11 @@ void feedback() {
 void aboutUs() {
  clrscr();
  printf("_______________\n");
- printf("BATCH   A2\nBRANCH   ECE\n");
- printf("_______________\n");
- printf("\nMADE BY\n");
- printf("\n\nNAME\t\t\t\tENROLLMENT NUMBER\n");
- printf("_________________________________________________\n");
- printf("ISHIKA SHARMA\t\t\t\t18102034\n" );
- printf("_________________________________________________\n");
- printf("KHUSHI SRIVASTAVA\t\t\t18102035\n" );
- printf("_________________________________________________\n");
- printf("PRANAV JAIN\t\t\t\t18102039\n" );
- printf("_________________________________________________\n");
- printf("SATYAM RAJPOOT\t\t\t\t18102234\n");
- printf("_________________________________________________\n");
+ printf("\t\tABOUT US");
+ printf("_______________\n\n");
+ printf("Provides 24");
+ printf("\n_________________________________________________\n");
+
 
 }
 
