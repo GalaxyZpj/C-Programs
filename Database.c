@@ -1129,27 +1129,18 @@ void feedback() {
   char fback[10000];
     int rate;
     printf("Rate us out of 5:\n");
-    printf("1 for Unsatisfied\n2 for Can-be-better\n3 for Average\n4 for Good\n5 for Excellent\n");
+    printf("1 for Unsatisfied\n2 for Can-be-better\n3 for Average\n4 for Good\n5 for Excellent\nEnter your choice: ");
     scanf("%d", &rate);
-    printf("Rated: ");
-    if(rate>0 && rate<6) {
-        switch(rate) {
-        case 1: printf("Unsatisfied\n"); break;
-        case 2: printf("Can-be-better\n"); break;
-        case 3: printf("Average\n"); break;
-        case 4: printf("Good\n"); break;
-        case 5: printf("Excellent\n"); break;
-      }
-      printf("Please provide your feedback.... Highly appreciated!\n");
-      fflush(stdin);
-      gets(fback);
-      printf("Your feedback: ");
-      puts(fback);
-      printf("Thanks a lot for the feedback!\nPress any key to return to main menu.");
-      getch();
-      menu(temp->username);
-    }
-    else printf("Invalid Choice!\n");
+    printf("Thanks for rating\n");
+    printf("\nPlease provide your feedback.... Highly appreciated!\nBegin typing >>> ");
+    fflush(stdin);
+    gets(fback);
+    FILE *fp = fopen("./Source Files/Feedbacks.txt", "a+");
+    fprintf(fp, "%s\n\n", fback);
+    fclose(fp);
+    printf("Thanks a lot for the feedback!\nPress any key to return to main menu.");
+    getch();
+    menu(temp->username);
 }
 void aboutUs() {
  clrscr();
@@ -1377,7 +1368,13 @@ void revenue() {
 }
 void sessionRecords(){}
 void usrfeeds() {
-
+  char feed[10000]; int r;
+  FILE *fp = fopen("./Source Files/Feedbacks.txt", "r+");
+  while(!feof(fp)) {
+    fscanf(fp, "%s\n\n", feed);
+    printf("%s ", feed);
+  }
+  fclose(fp);
 }
 void adminMenu() {
   scanID();
