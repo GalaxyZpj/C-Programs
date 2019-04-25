@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <conio.h>
 //
-int ID_init, hcount = 0, fcount = 0;  char flno[7];
+int ID_init, totalRevenue, hcount = 0, fcount = 0;  char flno[7];
 
 //Linked Lists for the Program
 typedef struct user {
@@ -112,17 +112,6 @@ void freeFilenode();
 void scanID();
 void writeID();
 
-//void gotoxy(int , int);
-//void plus(int, int);
-//void minus(int, int);
-//int leapyear(int);
-//void printmonth(int, int);
-//int days(int, int);
-//int countdays(struct day, struct day);
-//int getDayNumber(int, int, int);
-//void printcalender(int, int, int, int);
-//struct day calendermain();
-
 void flightRecords(int amount, int tid);
 void display();
 void reserve();
@@ -161,7 +150,7 @@ void currentTime() {
     time(&rawtime);
     time_ = localtime(&rawtime);
 
-    printf("%i:%i:%i | %i-%i-%i\n", time_->tm_hour, time_->tm_min,
+    printf("\t\t\t\t\t %i:%i:%i | %i-%i-%i\n", time_->tm_hour, time_->tm_min,
             time_->tm_sec, time_->tm_mday, time_->tm_mon+1,
             time_->tm_year+1900);
 
@@ -181,7 +170,9 @@ void paymentPortal(int amount) {
   printf(":::CONFIRM PAYMENT:::\nPress 1 to confirm else 0 to reenter card details:-\n");
   c = getch();
   if(c == '1') {
-    tid = (1*69) + ID_init; ID_init = tid; writeID();
+    tid = (1*69) + ID_init; ID_init = tid;
+    totalRevenue = totalRevenue + amount;
+    writeID();
     printf("Your transaction id is: %d\n\nPress any key to display booking details\n", tid);
     getch();
   }
@@ -210,7 +201,10 @@ void fileEntry() {
     tempf = tempf->next;
   }
   fclose(fp);
-  printf("Entry Successful!!!\n\nPress any key to return to main menu.");
+  printf("*************************************\n");
+  printf("*     BOOKING SUCCESSFULLY DONE!!   *\n");
+  printf("*************************************\n\n\n");
+  printf("\nPress any key to return to main menu...");
   getch();
   menu(temp->username);
 }
@@ -323,12 +317,12 @@ void freeFilenode() {
 void scanID() {
   FILE *fp = fopen("./Source Files/ID.txt", "r");
   while(!feof(fp))
-    fscanf(fp, "%d", &ID_init);
+    fscanf(fp, "%d\n%d", &ID_init, &totalRevenue);
   fclose(fp);
 }
 void writeID() {
   FILE *fp = fopen("./Source Files/ID.txt", "w");
-  fprintf(fp, "%d", ID_init);
+  fprintf(fp, "%d\n%d", ID_init, totalRevenue);
   fclose(fp);
 }
 
@@ -648,9 +642,8 @@ void reserve() {
   printf("Number of adults(age above 12)\n");
   scanf("%d",&ptr->adults);
 
-  printf("Number of infants(age group below 2)\n\n\n");
+  printf("Number of infants(age group below 2)\n");
   scanf("%d",&ptr->infants);
-
   printf("Your trip type? ONE WAY or TWO WAY ROUND TRIP \n\n Press 1 for one way trip \n\n       2 for a two way trip\n\n\n");
   char c;
   c = getch();
@@ -706,18 +699,12 @@ void confirmation() {
 
   FILE*f;
   f=fopen("./Source Files/FLIGHT FILES/ticket.txt","r");
-  system("color 1F");
   while(!feof(f)) {
     fscanf(f,"NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,&ptr->clas,&ptr->adults,&ptr->children,&ptr->infants,&ptr->trip_type,&ptr->routing);
   }
-
   keyPressed = 0; position = 1;
   while(keyPressed != 13) {
     clrscr();
-    printf("\n\n\n\t\t\t\tTICKET\n\n\n");
-    printf("NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
-    printf("\n\n*****************************************************\n");
-    printf("FlightNO--->>%s\n",flno);
     printf("Total fare--->>%d\n",payout);
     printf("**********************************************************\n");
     printf("\nProceed for the payment:-\n");
@@ -736,12 +723,15 @@ void confirmation() {
     case 1: paymentPortal(payout); break;
     case 2: display(); break;
   }
+  clrscr();
+  system("color 1F");
+  printf("\n\n\n\t\t\t\tTICKET\n\n\n");
+  printf("NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
+  printf("FlightNO--->>%s\n",flno);
+  printf("Press any key to continue...");
+  getch();
   flightRecords(payout, ID_init);
   system("cls");
-  printf("*************************************\n");
-  printf("*     BOOKING SUCCESSFULLY DONE!!   *\n");
-  printf("*************************************\n\n\n");
-  printf("Your NET payable amount is%d:-\n",payout);
   fclose(f);
 }
 void display() {
@@ -942,12 +932,12 @@ void hotelFinalizing(HOTEL *op) {
   keyPressed = 0; position = 1;
   while(keyPressed != 13) {
     clrscr();
-    printf("\n\n\n--Summary--\n");
-    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("NAME\t\t\t\t\t\tCHECKIN\t\t\t\tCHECKOUT\t\t\t\t\tFARE\n");
-    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("%s\t\t\t%10d-%d-%d\t\t\t\t%d-%d-%d\t\t\t\t\t%d\n", op->name, d1.dd, d1.mm, d1.yy, d2.dd, d2.mm, d2.yy, tprice);
-    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("\n\t\t\t\t\t\t\t\t\t\t<<<<<Summary >>>>>\n\n");
+    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("  FARE\t\t\t\t\t\t\t\tNAME\t\t\t\t\t  CHECKIN\t\t\t\t\t\t   CHECKOUT\n");
+    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf(" %d\t\t\t  %42s\t\t\t\t %10d-%d-%d\t\t\t\t\t  %10d-%d-%d\n", tprice, op->name, d1.dd, d1.mm, d1.yy, d2.dd, d2.mm, d2.yy);
+    printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     printf("\nProceed for the payment:-\n");
     arrorHere(1, position); printf("  YES\n");
     arrorHere(2, position); printf("  NO\n");
@@ -978,7 +968,6 @@ void hotelPrinting(char country[]) {
     for(int i=0; i<6; i++) {
       fscanf(fp, "%s %d\n", newNodeH->e[i].type, &newNodeH->e[i].rfare);
     }
-
     if(headH != 0) {
       tempH->next = newNodeH;
       tempH = newNodeH;
@@ -1062,7 +1051,7 @@ void displayPreviousRecords(HK *headHK, HK*tempHK){
     printf("NO PREVIOUS RECORDS...\n");
   }
   else{
-    tempf=headf;
+    tempf=headf->next;
     printf("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     printf("Transaction ID\t\t\t\tHOTEL NAME/FLIGHT NO.\t\t\t\tCHECK IN DATE\t\t\t\tCHECK OUT DATE\t\t\t\tAMOUNT\n");
     printf("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
@@ -1082,9 +1071,6 @@ void flightBooking() {
   printf("****************WELCOME TO TRAVELISTA FLIGHT BOOKING MODE********************\n");
   printf("While booking flights with TRAVELISTA, you can expect the ultimate online booking experience.\n With premium customer service, 24/7 dedicated helpline for support, TRAVELISTA takes great pride in enabling customer satisfaction.\n With a cheapest flight guarantee, book your tickets at the lowest airfares.\n Avail great offers, exclusive deals for loyal customers and get instant updates for your flight status and fare drops.");
   display();
-  printf("\nPress any key to return to main menu...");
-  getch();
-  menu(temp->username);
 }
 void hotelBooking() {
   keyPressed = 0; position = 1;
@@ -1110,7 +1096,6 @@ void hotelBooking() {
     }else {
       position = position;
     }
-
   }
 
   switch(position) {
@@ -1207,23 +1192,24 @@ void menu(char mname[]) {
   clrscr();
   while(keyPressed != 13) {
     clrscr();
-    printf("\n---------------------------------------- TRAVALISTA ---------------------------------------------\n");
-    printf(" Login Date and Time\t\t\t\t\t\t\t\tWelcome @%s\n ", mname);
+    printf("\n\t\t\t\t\t---------------------------------------- TRAVALISTA ---------------------------------------------\n");
+    printf("\t\t\t\t\t Login Date and Time\t\t\t\t\t\t\t\tWelcome @%s\n ", mname);
     currentTime();
-    printf("\nChoose among the following:-\n");
-    printf("-------------------------------------------------------------------------------------------------\n");
-    arrorHere(1, position); printf("1. Flight Booking\n");
-    printf("-------------------------------------------------------------------------------------------------\n");
-    arrorHere(2, position); printf("2. Hotel Booking\n");
-    printf("-------------------------------------------------------------------------------------------------\n");
-    arrorHere(3, position); printf("3. Feedback\n");
-    printf("-------------------------------------------------------------------------------------------------\n");
-    arrorHere(4, position); printf("4. About us\n");
-    printf("-------------------------------------------------------------------------------------------------\n");
-    arrorHere(5, position); printf("5. Previous Records\n");
-    printf("-------------------------------------------------------------------------------------------------\n");
-    arrorHere(6, position); printf("0. Exit\n");
-    printf("-------------------------------------------------------------------------------------------------\n");
+    printf("\n\t\t\t\t\tChoose among the following:-\n");
+    printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
+    printf("\t\t\t\t\t"); arrorHere(1, position); printf("1. Flight Booking\n");
+    printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
+    printf("\t\t\t\t\t"); arrorHere(2, position); printf("2. Hotel Booking\n");
+    printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
+    printf("\t\t\t\t\t"); arrorHere(3, position); printf("3. Feedback\n");
+    printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
+    printf("\t\t\t\t\t"); arrorHere(4, position); printf("4. About us\n");
+    printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
+    printf("\t\t\t\t\t"); arrorHere(5, position); printf("5. Previous Records\n");
+    printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
+    printf("\t\t\t\t\t"); arrorHere(6, position); printf("0. Exit\n");
+    printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n\n\n");
+    printf("\t\t\t\t\t\t\t\t>>> USE UP AND DOWN ARROW KEYS FOR NAVIGATION <<<\n\n");
     keyPressed = getch();
 
     if(keyPressed == 80 && position != 6) {
@@ -1402,14 +1388,14 @@ void adminMenu() {
   clrscr();
   while(keyPressed != 13) {
     clrscr();
-    printf(":::::ADMIN MENU:::::\n");
-    arrorHere(1, position); printf("1. List of users\n");
-    arrorHere(2, position); printf("2. Total Bookings\n");
-    arrorHere(3, position); printf("3. Amount generated \n");
-    arrorHere(4, position); printf("4. Login Session Records\n");
-    arrorHere(5, position); printf("5. Feedbacks\n");
+    printf("\t\t\t\t\t\t\t\t\t");printf(":::::::::::::::ADMIN MENU:::::::::::::::\n\n");
+    printf("\t\t\t\t\t\t\t\t\t");arrorHere(1, position); printf("1. List of users\n");
+    printf("\t\t\t\t\t\t\t\t\t");arrorHere(2, position); printf("2. Total Bookings\n");
+    printf("\t\t\t\t\t\t\t\t\t");arrorHere(3, position); printf("3. Amount generated \n");
+    printf("\t\t\t\t\t\t\t\t\t");arrorHere(4, position); printf("4. Login Session Records\n");
+    printf("\t\t\t\t\t\t\t\t\t");arrorHere(5, position); printf("5. Feedbacks\n");
     //arrorHere(6, position); printf("6. Previous Records\n");
-    arrorHere(6, position); printf("0. Exit\n");
+    printf("\t\t\t\t\t\t\t\t\t");arrorHere(6, position); printf("0. Exit\n");
     keyPressed = getch();
 
     if(keyPressed == 80 && position != 6) {
@@ -1502,9 +1488,9 @@ void createUser() {
   FILE *fp = fopen("./Source Files/Database.txt", "a");
   fprintf(fp,"%s %s %s %s %d %d %d %s %s %s\n", temp->username, temp->password, temp->ed.fName, temp->ed.lName,
    temp->ed.eb.day, temp->ed.eb.month, temp->ed.eb.year, temp->ed.contact, temp->ed.state, temp->ed.city);
-  printf("\nUser registered successfully.\n");
+  printf("\nUser registered successfully.\n\nPROGRAM WILL NOW QUIT, RESTART TO LOGIN.\n\nPress any key to continue.");
   fclose(fp);
-
+  getch();
   //File for the user created
   char tname[100];
   char path[] = "./Source Files/USERS\\";
@@ -1515,6 +1501,7 @@ void createUser() {
   fp = fopen(tname, "w+");
 
   fclose(fp);
+  exit(0);
 }
 void loginCheck(char uname[], char upass[]) {
   temp = head;
@@ -1547,9 +1534,9 @@ void loginCheck(char uname[], char upass[]) {
 }
 void login() {
   char tuname[25], tupass[25];
-  printf("Username: ");
+  printf("\n\t\t\t\t\t\t\t\t\t"); printf("Username: ");
   scanf("%s", tuname);
-  printf("Password: ");
+  printf("\t\t\t\t\t\t\t\t\t"); printf("Password: ");
   scanf("%s", tupass);
   loginCheck(tuname, tupass);
 }
@@ -1558,11 +1545,13 @@ void userPortal() {
   #define MIN 1
   while(keyPressed != 13) {
     clrscr();
-    printf("**********TRAVALISTA**********\n");
-    printf("\n---USERLOGIN---\n");
-    arrorHere(1, position); printf("1. LOGIN\n");
-    arrorHere(2, position); printf("2. SIGNUP\n\n");
-    arrorHere(3, position); printf("0. <ADMINLOGIN>\n");
+    printf("\t\t\t\t\t\t\t\t\t<<<<<<<<<<<<<< TRAVALISTA >>>>>>>>>>>>>>\n");
+    printf("\n\t\t\t\t\t\t\t\t\t\t     :::USERLOGIN:::\n\n");
+    printf("\t\t\t\t\t\t\t\t\t"); arrorHere(1, position); printf("1. LOGIN\n");
+    printf("\t\t\t\t\t\t\t\t\t"); arrorHere(2, position); printf("2. SIGNUP\n\n");
+    printf("\t\t\t\t\t\t\t\t\t"); arrorHere(3, position); printf("0. << ADMINLOGIN >>\n");
+    printf("\n\n\n\n\n\t\t\t\t\t\t\t\t    >>> USE UP AND DOWN ARROW KEYS FOR NAVIGATION <<<\n\n");
+
     keyPressed = getch();
 
     if(keyPressed == 80 && position != MAX) {
