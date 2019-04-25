@@ -505,11 +505,9 @@ void printcalender(struct day curr, int x, int y){
   int date=curr.dd;
   if(month<1 || month >12 ){
     printf("INVALID MONTH!\n");
-//    break;
   }
   if(year<1600){
     printf("INVALID YEAR!\n" );
-//    break;
   }
   gotoxy(20,y);
   printmonth(month,year);
@@ -560,7 +558,6 @@ void printcalender(struct day curr, int x, int y){
     printf("%d",d);
     for(d=2;d<=n;d++){
       if(count%7==0){
-  //      printf("\n" );
         y++;
         count=0;
         x=x1-8;
@@ -574,7 +571,6 @@ void printcalender(struct day curr, int x, int y){
           printf(">>");
         }
       }
-  //pointday(n,date);
   gotoxy(20, y+2);
   printf("CALENDER  FOR WEEK DAY REFERENCE\n");
   gotoxy(8,y+4);
