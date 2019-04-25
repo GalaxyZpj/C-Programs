@@ -6,6 +6,8 @@
 #include <conio.h>
 //
 int ID_init, totalRevenue, hcount = 0, fcount = 0;  char flno[7];
+char source [10],destination[15];
+
 
 
 //Linked Lists for the Program
@@ -778,6 +780,9 @@ void confirmation() {
   printf("\n\n\n\t\t\t\tTICKET\n\n\n");
   printf("NAME:%s\nMOBILE_NO%s\nCLASS%d\nNUMBER OF ADULTS:%d\nNUMBER OF CHILDREN%d\nNUMBER OF INFANTS%d\nTRIP_TYPE:%d\nROUTING:%d\n",ptr->name,ptr->mobileno,ptr->clas,ptr->adults,ptr->children,ptr->infants,ptr->trip_type,ptr->routing);
   printf("FlightNO--->>%s\n",flno);
+  printf("Source--->%s\n",source);
+  printf("Destination--->%s\n",destination);
+  printf("Booking Date--->%d-%d-%d\n", df.dd, df.mm, df.yy);
   printf("Press any key to continue...");
   getch();
   flightRecords(payout, ID_init);
@@ -789,7 +794,6 @@ void display() {
   freeFilenode();
   struct filenode *s=0,*temp=0;
   //system("color 0E");
-  char source [10],destination[15];
 
   position = 1; keyPressed = 0;
   clrscr();
@@ -857,9 +861,11 @@ case 10: strcpy(destination, "Dubai"); break;
   system("cls");
 
   printf(" select Booking  date from the calender");
+  getch();
+
 
   system("cls");
-  DAY book_date=calendermain();
+  df=calendermain();
 
 
 
@@ -880,6 +886,7 @@ case 10: strcpy(destination, "Dubai"); break;
   fclose(f);
 //now extracting the values from these nodes to get desired output
   temp=headd;
+  system("cls");
   printf("\n\n\nChoose the desired flight from the list:- \n");
   printf("------------------------------------------------------------------------------------\n");
   printf("SOURCE\t\t\tDESTINATION\t\tFLIGHT_NO\t\tFARE\n");
@@ -1204,19 +1211,11 @@ void feedback() {
 void aboutUs() {
  clrscr();
  printf("_______________\n");
- printf("BATCH   A2\nBRANCH   ECE\n");
- printf("_______________\n");
- printf("\nMADE BY\n");
- printf("\n\nNAME\t\t\t\tENROLLMENT NUMBER\n");
- printf("_________________________________________________\n");
- printf("ISHIKA SHARMA\t\t\t\t18102034\n" );
- printf("_________________________________________________\n");
- printf("KHUSHI SRIVASTAVA\t\t\t18102035\n" );
- printf("_________________________________________________\n");
- printf("PRANAV JAIN\t\t\t\t18102039\n" );
- printf("_________________________________________________\n");
- printf("SATYAM RAJPOOT\t\t\t\t18102234\n");
- printf("_________________________________________________\n");
+ printf("\t\tABOUT US");
+ printf("_______________\n\n");
+ printf("Provides 24");
+ printf("\n_________________________________________________\n");
+
 
 }
 

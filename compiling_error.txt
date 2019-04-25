@@ -1,7 +1,0 @@
-C:\Users\ishika\Documents\Travalista\Database.c: In function 'display':
-C:\Users\ishika\Documents\Travalista\Database.c:823:3: error: unknown type name 'DAY'
-   DAY book_date=calendermain();
-   ^~~
-C:\Users\ishika\Documents\Travalista\Database.c:823:17: error: incompatible types when initializing type 'int' using type 'struct day'
-   DAY book_date=calendermain();
-                 ^~~~~~~~~~~~
