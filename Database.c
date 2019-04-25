@@ -354,15 +354,6 @@ void gotoxy(int x, int y){
   xy.Y=y;
   SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),xy);
 }
-/*void pointday(int tdays,int date){
-  int i;
-  for(i=0;i<date;i++){
-    if(i==date-1){
-      gotoxy(xpos,ypos);
-      printf("_");
-    }
-  }
-}*/
 void plus(int *month, int *year){
   ++*month;
   if(*month>12){
@@ -414,15 +405,6 @@ int verification(DAY vday){
     return (1);
   }
 }
-/*DAY inputDate(){
-//  int v=1;
-  while(v){
-    printf("\nEnter Date (DD MM YYYY)\n");
-    scanf("%d %d %d",&d.dd, &d.mm, &d.yy);
-    v=verification(d);
-  }
-  return (d);
-}*/
 void printmonth(int month, int year){
   gotoxy(20,2);
   printf("-----------------------------------------------------\n" );
@@ -593,6 +575,7 @@ void printcalender(struct day curr, int x, int y){
   printf("\nPress 'RIGHT'  to Next, Press 'LEFT' to Previous and '0' to Enter Date");
 }
 DAY calendermain(){
+  v = 1;
   char c;
   curr=currentDate();
   //scanf("%d %d",&date.mm ,&date.yy);
