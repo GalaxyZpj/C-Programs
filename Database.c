@@ -95,12 +95,6 @@ FK *newNodeFK, *headFK = 0, *tempFK = 0, *temp1FK = 0;
 
 
 //FunctionPrototypes
-void userList();
-void recordBook();
-void revenue();
-void sessionRecords();
-void usrfeeds();
-
 void clrscr();
 void currentTime();
 void paymentPortal(int);
@@ -129,6 +123,13 @@ void feedback();
 void aboutUs();
 
 void menu();
+
+void userList(USER *head, USER* temp);
+void recordBook();
+void revenue();
+void sessionRecords();
+void usrfeeds();
+void adminMenu();
 
 void fileToList();
 void adminLogin();
@@ -329,21 +330,19 @@ void writeID() {
 
 
 //CalenderFunctions
-struct day{
+int v=1;
+typedef struct day{
   int dd;
   int mm;
   int yy;
-};
-struct day curr;
-struct day d;
-struct day d1;
-struct day d2;
-struct day df;
+}DAY;
+DAY curr, d, d1, d2 ,df;
+
 COORD xy={0,0};
-struct day currentDate() {
+DAY currentDate() {
   time_t rawtime;
     struct tm*  time_;
-    struct day cdate;
+    DAY cdate;
     time(&rawtime);
     time_ = localtime(&rawtime);
     cdate.dd=time_->tm_mday;
@@ -379,11 +378,52 @@ void minus(int *month, int *year){
       *month=*month+12;
     }
 }
-int leapyear(int year){
+int checkLeap(int year){
   if(year % 400 ==0||(year % 100 !=0 && year % 4 ==0))
      return(1);
   return(0);
 }
+int verification(DAY vday){
+  curr= currentDate();
+  int date= curr.dd;
+  int month= curr.mm;
+  int year= curr.yy;
+  if((vday.dd < date && vday.mm == month && vday.yy==year) || (vday.mm==month && vday.yy < year) || (vday.mm < month && vday.yy == year)){
+    printf("DATE ENTERD HAS BEEN PASSES.\nPLEASE ENTER A VALID\n");
+    return (1);
+  }
+  if(vday.mm >= 1 && vday.mm <=12){
+    if((vday.dd >=1 && vday.dd <=31) &&(vday.mm ==1 || vday.mm ==3 || vday.mm ==5 || vday.mm ==7 || vday.mm ==8 || vday.mm ==10 || vday.mm ==12)){
+      return (0);
+    }
+    if((vday.dd >=1 && vday.dd <=30) &&(vday.mm ==4 || vday.mm ==6 || vday.mm ==9 || vday.mm ==11)){
+      return (0);
+    }
+    if(vday.mm==2){
+      int leap= checkLeap(vday.yy);
+      if(vday.dd>=1 && vday.dd<=29 && leap==1){
+        return (0);
+      }
+      else{
+        printf("PLEASE ENTER A VALID DATE\n");
+        return (1);
+      }
+    }
+  }
+  else{
+    printf("PLEASE ENTER A VALID DATE\n" );
+    return (1);
+  }
+}
+/*DAY inputDate(){
+//  int v=1;
+  while(v){
+    printf("\nEnter Date (DD MM YYYY)\n");
+    scanf("%d %d %d",&d.dd, &d.mm, &d.yy);
+    v=verification(d);
+  }
+  return (d);
+}*/
 void printmonth(int month, int year){
   gotoxy(20,2);
   printf("-----------------------------------------------------\n" );
@@ -416,7 +456,7 @@ void printmonth(int month, int year){
 int days(int month ,int year){
   switch (month) {
     case 1: return(31);
-    case 2: if(leapyear(year)==1)
+    case 2: if(checkLeap(year)==1)
               return(29);
             else
               return(28);
@@ -490,87 +530,103 @@ void printcalender(struct day curr, int x, int y){
   gotoxy(x,y);
   printf("S\t    M\t    T\t    W\t    T\t    F\t    S\n");
   int n=days(month,year);
-  int day=getDayNumber(d,month,year);
-  y++;
-  switch (day) {
-    case 0:{
-      x=x;
-      count=1;
-      break;
+    int day=getDayNumber(d,month,year);
+    y++;
+    switch (day) {
+      case 0:{
+        x=x;
+        count=1;
+        break;
+      }
+      case 1:{
+        x+=8;
+        count=2;
+        break;
+      }
+      case 2:{
+        x+=16;
+        count=3;
+        break;
+      }
+      case 3:{
+        x+=24;
+        count=4;
+        break;
+      }
+      case 4:{
+        x+=32;
+        count=5;
+        break;
+      }
+      case 5:{
+        x+=40;
+        count=6;
+        break;
+      }
+      case 6:{
+        x+=48;
+        count=7;
+        break;
+      }
     }
-    case 1:{
-      x+=8;
-      count=2;
-      break;
-    }
-    case 2:{
-      x+=16;
-      count=3;
-      break;
-    }
-    case 3:{
-      x+=24;
-      count=4;
-      break;
-    }
-    case 4:{
-      x+=32;
-      count=5;
-      break;
-    }
-    case 5:{
-      x+=40;
-      count=6;
-      break;
-    }
-    case 6:{
-      x+=48;
-      count=7;
-      break;
-    }
-  }
-  gotoxy(x,y);
-  printf("%d",d);
-  for(d=2;d<=n;d++){
-    if(count%7==0){
-//      printf("\n" );
-      y++;
-      count=0;
-      x=x1-8;
-    }
-    x=x+8;
     gotoxy(x,y);
-    count++;
-    printf("%d\t",d );
-  }
-
+    printf("%d",d);
+    for(d=2;d<=n;d++){
+      if(count%7==0){
+  //      printf("\n" );
+        y++;
+        count=0;
+        x=x1-8;
+      }
+      x=x+8;
+      gotoxy(x,y);
+      count++;
+      printf("%d\t",d );
+      if(d==date){
+          gotoxy(x-2,y);
+          printf(">>");
+        }
+      }
   //pointday(n,date);
   gotoxy(8, y+2);
-  printf("\nPress 'UP'  to Next, Press 'DOWN' to Previous and '0' to Quit");
+  printf("CALENDER ONLY FOR WEEK DAY REFERENCE\n");
+  gotoxy(8,y+4);
+  printf("\nPress 'RIGHT'  to Next, Press 'LEFT' to Previous and '0' to Enter Date");
 }
-struct day calendermain(){
+DAY calendermain(){
   char c;
   curr=currentDate();
+  //scanf("%d %d",&date.mm ,&date.yy);
   system("cls");
 
   while(c!='0'){
     printcalender(curr,20,5);
     c=getch();
-    if(GetAsyncKeyState(VK_UP)){
+    fflush(stdin);
+    if(GetAsyncKeyState(VK_RIGHT)){
       plus(&curr.mm,&curr.yy);
       system("cls");
       printcalender(curr,20,5);
+      fflush(stdin);
       }
-    if(GetAsyncKeyState(VK_DOWN)){
+    if(GetAsyncKeyState(VK_LEFT)){
       minus(&curr.mm,&curr.yy);
       system("cls");
       printcalender(curr,20,5);
+      fflush(stdin);
       }
     }
-    system("cls");
+    if(c=='0'){
+      while(v){
+        printf("\nEnter Date (DD MM YYYY)\n");
+        scanf("%d %d %d",&d.dd, &d.mm, &d.yy);
+        v=verification(d);
+      }
+      return (d);
+    }
+  /*  system("cls");
     printf("Enter a date(DD MM YYYY)\n");
-    scanf("%d %d %d",&d.dd, &d.mm, &d.yy);
-  return(d);
+    scanf("%d %d %d",&d.dd, &d.mm, &d.yy); */
 }
 
 //FlightBooking SubFunctions
@@ -586,7 +642,7 @@ void flightRecords(int amount, int tid) {
   newNodeFK->cin_year  = newNodef->cin_year  = df.yy;//d1.yy;
   newNodeFK->cout_day  = newNodef->cout_day  = 0;
   newNodeFK->cout_month  = newNodef->cout_month = 0;
-  newNodeFK->cout_year  = newNodef->cout_year  = 0;
+  newNodeFK->cout_year  = newNodef->cout_year  = 1980;
   newNodeFK->amount  = newNodef->amount  = amount;
   if(headFK != 0) {
     tempFK->next = newNodeFK;
@@ -1146,42 +1202,21 @@ void hotelBooking() {
 }
 void feedback() {
   clrscr();
-  char fback[1000];
+  char fback[10000];
     int rate;
     printf("Rate us out of 5:\n");
-    printf("1 for Unsatisfied\n2 for Can-be-better\n3 for Average\n4 for Good\n5 for Excellent\n");
+    printf("1 for Unsatisfied\n2 for Can-be-better\n3 for Average\n4 for Good\n5 for Excellent\nEnter your choice: ");
     scanf("%d", &rate);
-    printf("Rated: ");
-    if(rate>0 && rate<6)
-    {
-        switch(rate){
-        case 1:
-            printf("Unsatisfied\n");
-            break;
-        case 2:
-            printf("Can-be-better\n");
-            break;
-        case 3:
-            printf("Average\n");
-            break;
-        case 4:
-            printf("Good\n");
-            break;
-        case 5:
-            printf("Excellent\n");
-            break;
-        }
-        printf("Please provide your feedback.... Highly appreciated!\n");
-        fflush(stdin);
-        gets(fback);
-        printf("Your feedback: ");
-        puts(fback);
-        printf("Thanks a lot for the feedback!\nPress any key to return to main menu.");
-        getch();
-        menu(temp->username);
-
-    }
-    else printf("Invalid Choice!\n");
+    printf("Thanks for rating\n");
+    printf("\nPlease provide your feedback.... Highly appreciated!\nBegin typing >>> ");
+    fflush(stdin);
+    gets(fback);
+    FILE *fp = fopen("./Source Files/Feedbacks.txt", "a+");
+    fprintf(fp, "%s\n\n", fback);
+    fclose(fp);
+    printf("Thanks a lot for the feedback!\nPress any key to return to main menu.");
+    getch();
+    menu(temp->username);
 }
 void aboutUs() {
  clrscr();
@@ -1401,10 +1436,24 @@ void recordBook(){
     }
    }
  }
-void revenue(){}
+void revenue() {
+  clrscr();
+  printf("Revenue earned by the program: %d\n\nPress any key to return to Admin Menu...", totalRevenue);
+  getch();
+  adminMenu();
+}
 void sessionRecords(){}
-void usrfeeds(){}
+void usrfeeds() {
+  char feed[10000]; int r;
+  FILE *fp = fopen("./Source Files/Feedbacks.txt", "r+");
+  while(!feof(fp)) {
+    fscanf(fp, "%s\n\n", feed);
+    printf("%s ", feed);
+  }
+  fclose(fp);
+}
 void adminMenu() {
+  scanID();
   position = 1; keyPressed = 0;
   clrscr();
   while(keyPressed != 13) {
