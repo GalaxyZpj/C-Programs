@@ -7,6 +7,7 @@
 //
 int ID_init, totalRevenue, hcount = 0, fcount = 0;  char flno[7];
 
+
 //Linked Lists for the Program
 typedef struct user {
   char username[25];
@@ -666,12 +667,11 @@ void reserve() {
         }
       }while(strlen(ptr->mobileno)!=10);
 
-  printf("\t\tchoose the class(Press the corresponding number ) :-\n1)bussiness\t2)economy\t3)premium economy\n \n");
-  scanf("%d",&ptr->clas);
+
     system("cls");
 
   printf("\n\t\t\t**************************************************\n");
-  printf("\t\t\tnow please enter the details of the traveller(s)\n" );                     //column wise representation
+  printf("\t\t\t  Enter the details of the traveller(s)\n" );
   printf("\t\t\t**************************************************\n\n");
 
 
@@ -683,13 +683,25 @@ void reserve() {
 
   printf("Number of infants(age group below 2)\n");
   scanf("%d",&ptr->infants);
-  printf("Your trip type? ONE WAY or TWO WAY ROUND TRIP \n\n Press 1 for one way trip \n\n       2 for a two way trip\n\n\n");
+
+  system("cls");
+
+  printf("\n\t\t\t**************************************************\n");
+  printf("\t\t\t  Enter the Routing details\n" );
+  printf("\t\t\t**************************************************\n\n");
+
+
+  printf("\t\tchoose the class(Press the corresponding number ) :- \n");
+  printf("\n1)bussiness\t2)economy\t3)premium economy\n\n");
+  scanf("%d",&ptr->clas);
+  printf("\n**************************************************\n");
+  printf("Your trip type? ONE WAY or TWO WAY ROUND TRIP \n\n Press 1 for one way trip \n\n     Press 2 for a two way trip\n\n");
   char c;
   c = getch();
   ptr->trip_type = (int)(c - '0');
   //scanf("%d",&ptr->trip_type);
-
-  printf("Tell us about your comfortable routing style\n \nPress 1 for DIRECT FLIGHTS \n\n      2 for CONNECTING(VIA) FLIGHTS\n");
+  printf("****************************************************\n");
+  printf("Tell us about your comfortable routing style\n \nPress 1 for DIRECT FLIGHTS \n\n   Press 2 for CONNECTING(VIA) FLIGHTS\n");
   char c1;
   c1 = getch();
   ptr->routing = (int)(c1 - '0');
@@ -732,7 +744,6 @@ void confirmation() {
     }
     ptrr=ptrr->next;
   }
-  df = calendermain();
   system("cls");
   reserve();
 
@@ -774,10 +785,12 @@ void confirmation() {
   fclose(f);
 }
 void display() {
+
   freeFilenode();
   struct filenode *s=0,*temp=0;
   //system("color 0E");
   char source [10],destination[15];
+
   position = 1; keyPressed = 0;
   clrscr();
   while(keyPressed != 13) {
@@ -842,6 +855,14 @@ case 10: strcpy(destination, "Dubai"); break;
 }
 
   system("cls");
+
+  printf(" select Booking  date from the calender");
+
+  system("cls");
+  DAY book_date=calendermain();
+
+
+
   FILE *f;
   f=fopen("./Source Files/FLIGHT FILES/details.txt","r");
 //copying the content of file to structure nodes
