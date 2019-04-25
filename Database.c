@@ -126,7 +126,6 @@ void menu();
 void userList(USER *head, USER* temp);
 void recordBook();
 void revenue();
-void sessionRecords();
 void usrfeeds();
 void adminMenu();
 
@@ -584,9 +583,7 @@ DAY calendermain(){
   v = 1;
   char c;
   curr=currentDate();
-  //scanf("%d %d",&date.mm ,&date.yy);
   system("cls");
-
   while(c!='0'){
     printcalender(curr,20,5);
     c=getch();
@@ -612,9 +609,6 @@ DAY calendermain(){
       }
       return (d);
     }
-  /*  system("cls");
-    printf("Enter a date(DD MM YYYY)\n");
-    scanf("%d %d %d",&d.dd, &d.mm, &d.yy); */
 }
 
 //FlightBooking SubFunctions
@@ -1226,11 +1220,11 @@ void menu(char mname[]) {
     printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
     printf("\t\t\t\t\t"); arrorHere(2, position); printf("2. Hotel Booking\n");
     printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
-    printf("\t\t\t\t\t"); arrorHere(3, position); printf("3. Feedback\n");
+    printf("\t\t\t\t\t"); arrorHere(3, position); printf("3.  Previous Records\n");
     printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
     printf("\t\t\t\t\t"); arrorHere(4, position); printf("4. About us\n");
     printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
-    printf("\t\t\t\t\t"); arrorHere(5, position); printf("5. Previous Records\n");
+    printf("\t\t\t\t\t"); arrorHere(5, position); printf("5. Feedback\n");
     printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
     printf("\t\t\t\t\t"); arrorHere(6, position); printf("0. Exit\n");
     printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n\n\n");
@@ -1246,11 +1240,11 @@ void menu(char mname[]) {
     }
   }
   switch(position) {
-    case 1:flightBooking(); break;
+    case 1: flightBooking(); break;
     case 2: hotelBooking(); break;
-    case 3: feedback(); break;
+    case 3: displayPreviousRecords(headHK, tempHK); break;
     case 4: aboutUs(); break;
-    case 5: displayPreviousRecords(headHK, tempHK); break;
+    case 5: feedback(); break;
     case 6: exit(0); break;
   }
 }
@@ -1411,7 +1405,6 @@ void revenue() {
   getch();
   adminMenu();
 }
-void sessionRecords(){}
 void usrfeeds() {
   char feed[10000]; int r;
   FILE *fp = fopen("./Source Files/Feedbacks.txt", "r+");
@@ -1431,13 +1424,10 @@ void adminMenu() {
     printf("\t\t\t\t\t\t\t\t\t");arrorHere(1, position); printf("1. List of users\n");
     printf("\t\t\t\t\t\t\t\t\t");arrorHere(2, position); printf("2. Total Bookings\n");
     printf("\t\t\t\t\t\t\t\t\t");arrorHere(3, position); printf("3. Amount generated \n");
-    printf("\t\t\t\t\t\t\t\t\t");arrorHere(4, position); printf("4. Login Session Records\n");
-    printf("\t\t\t\t\t\t\t\t\t");arrorHere(5, position); printf("5. Feedbacks\n");
-    //arrorHere(6, position); printf("6. Previous Records\n");
-    printf("\t\t\t\t\t\t\t\t\t");arrorHere(6, position); printf("0. Exit\n");
+    printf("\t\t\t\t\t\t\t\t\t");arrorHere(4, position); printf("4. Feedbacks\n");
+    printf("\t\t\t\t\t\t\t\t\t");arrorHere(5, position); printf("0. Exit\n");
     keyPressed = getch();
-
-    if(keyPressed == 80 && position != 6) {
+    if(keyPressed == 80 && position != 5) {
       position++;
     }else if(keyPressed == 72 && position != 1) {
       position--;
@@ -1452,11 +1442,9 @@ void adminMenu() {
 
     case 3: revenue(); break;
 
-    case 4: sessionRecords(); break;
+    case 4: usrfeeds(); break;
 
-    case 5: usrfeeds(); break;
-
-    case 6: exit(0); break;
+    case 5: exit(0); break;
   }
   getch();
 }
@@ -1565,10 +1553,8 @@ void loginCheck(char uname[], char upass[]) {
     }
   }
   if(temp == NULL) {
-    printf("User not found, Consider registering first.\n");
-    //printf("Enter Username and Password to register.\n");
-    userPortal();
-    //createUser();
+    printf("User not found,  Register first.\n\nPROGRAM WILL NOW QUIT.\n"); getch();
+    exit(0);
   }
 }
 void login() {
