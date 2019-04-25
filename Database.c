@@ -329,12 +329,13 @@ void writeID() {
 
 
 //CalenderFunctions
+int v=1;
 typedef struct day{
   int dd;
   int mm;
   int yy;
 }DAY;
-DAY curr, d, d1, d2 ,df, start, end;
+DAY curr, d, d1, d2 ,df;
 
 COORD xy={0,0};
 DAY currentDate() {
@@ -378,7 +379,7 @@ int verification(DAY vday){
   int month= curr.mm;
   int year= curr.yy;
   if((vday.dd < date && vday.mm == month && vday.yy==year) || (vday.mm==month && vday.yy < year) || (vday.mm < month && vday.yy == year)){
-    printf("DATE ENTERD HAS BEEN PASSED.\nPLEASE ENTER A VALID\n");
+    printf("PLEASE ENTER A VALID DATE.\n");
     return (1);
   }
   if(vday.yy >= year){
@@ -391,25 +392,24 @@ int verification(DAY vday){
       }
       if(vday.mm==2){
         int leap= checkLeap(vday.yy);
-        if(vday.dd>=1 && vday.dd<=29 && leap==1){
+        if(vday.dd<=29 && leap==1){
           return (0);
         }
         else{
-          printf("PLEASE ENTER A VALID DATE\n");
+          printf("PLEASE ENTER A VALID DATE.\n");
           return (1);
         }
       }
     }
     else{
-      printf("PLEASE ENTER A VALID DATE\n" );
+      printf("PLEASE ENTER A VALID DATE.\n" );
       return (1);
     }
   }
   else{
-    printf("PLEASE ENTER A VALID DATE\n");
+    printf("PLEASE ENTER A VALID DATE.\n" );
     return (1);
   }
-
 }
 void printmonth(int month, int year){
   gotoxy(20,2);
@@ -505,9 +505,11 @@ void printcalender(struct day curr, int x, int y){
   int date=curr.dd;
   if(month<1 || month >12 ){
     printf("INVALID MONTH!\n");
+//    break;
   }
   if(year<1600){
     printf("INVALID YEAR!\n" );
+//    break;
   }
   gotoxy(20,y);
   printmonth(month,year);
@@ -558,6 +560,7 @@ void printcalender(struct day curr, int x, int y){
     printf("%d",d);
     for(d=2;d<=n;d++){
       if(count%7==0){
+  //      printf("\n" );
         y++;
         count=0;
         x=x1-8;
@@ -571,15 +574,17 @@ void printcalender(struct day curr, int x, int y){
           printf(">>");
         }
       }
+  //pointday(n,date);
   gotoxy(20, y+2);
-  printf("CALENDER  FOR WEEK DAY REFERENCE\n");
+  printf("CALENDER ONLY FOR WEEK DAY REFERENCE\n");
   gotoxy(8,y+4);
   printf("\nPress 'RIGHT'  to Next, Press 'LEFT' to Previous and '0' to Enter Date");
 }
 DAY calendermain(){
-  int v=1;
+  v = 1;
   char c;
   curr=currentDate();
+  //scanf("%d %d",&date.mm ,&date.yy);
   system("cls");
 
   while(c!='0'){
@@ -599,12 +604,17 @@ DAY calendermain(){
       fflush(stdin);
       }
     }
+    if(c=='0'){
       while(v){
         printf("\nEnter Date (DD MM YYYY)\n");
         scanf("%d %d %d",&d.dd, &d.mm, &d.yy);
         v=verification(d);
       }
       return (d);
+    }
+  /*  system("cls");
+    printf("Enter a date(DD MM YYYY)\n");
+    scanf("%d %d %d",&d.dd, &d.mm, &d.yy); */
 }
 
 //FlightBooking SubFunctions
@@ -919,6 +929,7 @@ void hotelFinalizing(HOTEL *op) {
     printf("Hotel: %s\n\nChoose room type:-\n", op->name);
     printf("--------------------------------------------------------------------------------\n");
     printf("SerialNo.\t\tTYPE\t\t\t\t\tFARE\n");
+    printf("--------------------------------------------------------------------------------\n");
     arrorHere(1, position); printf("%d. %20s\t\t\t\t\t%d\n", 1, op->e[0].type, op->e[0].rfare);
     printf("--------------------------------------------------------------------------------\n");
     arrorHere(2, position); printf("%d. %20s\t\t\t\t\t%d\n", 2, op->e[1].type, op->e[1].rfare);
@@ -956,12 +967,12 @@ void hotelFinalizing(HOTEL *op) {
     default: printf("Invalid choice, press any key to try again."); getch(); hotelFinalizing(op);
   }
   printf("Choose checkin date: \n");
- start = calendermain();
+  d1 = calendermain();
 
   printf("Choose checkout date: \n");
-  end = calendermain();
+  d2 = calendermain();
 
-  nights = countdays(start, end);
+  nights = countdays(d1, d2);
   days = nights + 1;
   tprice = op->avgFare + (price * days);
   keyPressed = 0; position = 1;
