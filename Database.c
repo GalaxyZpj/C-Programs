@@ -94,12 +94,6 @@ FK *newNodeFK, *headFK = 0, *tempFK = 0, *temp1FK = 0;
 
 
 //FunctionPrototypes
-void userList();
-void recordBook();
-void revenue();
-void sessionRecords();
-void usrfeeds();
-
 void clrscr();
 void currentTime();
 void paymentPortal(int);
@@ -128,6 +122,13 @@ void feedback();
 void aboutUs();
 
 void menu();
+
+void userList(USER *head, USER* temp);
+void recordBook();
+void revenue();
+void sessionRecords();
+void usrfeeds();
+void adminMenu();
 
 void fileToList();
 void adminLogin();
@@ -585,7 +586,7 @@ void flightRecords(int amount, int tid) {
   newNodeFK->cin_year  = newNodef->cin_year  = df.yy;//d1.yy;
   newNodeFK->cout_day  = newNodef->cout_day  = 0;
   newNodeFK->cout_month  = newNodef->cout_month = 0;
-  newNodeFK->cout_year  = newNodef->cout_year  = 0;
+  newNodeFK->cout_year  = newNodef->cout_year  = 1980;
   newNodeFK->amount  = newNodef->amount  = amount;
   if(headFK != 0) {
     tempFK->next = newNodeFK;
@@ -1125,40 +1126,28 @@ void hotelBooking() {
 }
 void feedback() {
   clrscr();
-  char fback[1000];
+  char fback[10000];
     int rate;
     printf("Rate us out of 5:\n");
     printf("1 for Unsatisfied\n2 for Can-be-better\n3 for Average\n4 for Good\n5 for Excellent\n");
     scanf("%d", &rate);
     printf("Rated: ");
-    if(rate>0 && rate<6)
-    {
-        switch(rate){
-        case 1:
-            printf("Unsatisfied\n");
-            break;
-        case 2:
-            printf("Can-be-better\n");
-            break;
-        case 3:
-            printf("Average\n");
-            break;
-        case 4:
-            printf("Good\n");
-            break;
-        case 5:
-            printf("Excellent\n");
-            break;
-        }
-        printf("Please provide your feedback.... Highly appreciated!\n");
-        fflush(stdin);
-        gets(fback);
-        printf("Your feedback: ");
-        puts(fback);
-        printf("Thanks a lot for the feedback!\nPress any key to return to main menu.");
-        getch();
-        menu(temp->username);
-
+    if(rate>0 && rate<6) {
+        switch(rate) {
+        case 1: printf("Unsatisfied\n"); break;
+        case 2: printf("Can-be-better\n"); break;
+        case 3: printf("Average\n"); break;
+        case 4: printf("Good\n"); break;
+        case 5: printf("Excellent\n"); break;
+      }
+      printf("Please provide your feedback.... Highly appreciated!\n");
+      fflush(stdin);
+      gets(fback);
+      printf("Your feedback: ");
+      puts(fback);
+      printf("Thanks a lot for the feedback!\nPress any key to return to main menu.");
+      getch();
+      menu(temp->username);
     }
     else printf("Invalid Choice!\n");
 }
@@ -1380,10 +1369,18 @@ void recordBook(){
     }
    }
  }
-void revenue(){}
+void revenue() {
+  clrscr();
+  printf("Revenue earned by the program: %d\n\nPress any key to return to Admin Menu...", totalRevenue);
+  getch();
+  adminMenu();
+}
 void sessionRecords(){}
-void usrfeeds(){}
+void usrfeeds() {
+
+}
 void adminMenu() {
+  scanID();
   position = 1; keyPressed = 0;
   clrscr();
   while(keyPressed != 13) {
