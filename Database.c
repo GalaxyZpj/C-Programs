@@ -947,12 +947,16 @@ void hotelRecords(int amount, int tid) {
     headf = tempf = newNodef;
   }
   clrscr();
-  printf("\n:::BOOKING DETAILS:::\n");
-  fileEntry();
+/*  printf("\n:::BOOKING DETAILS:::\n");
   printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
   printf("Transaction ID\t\t\t\t Name\t\t\t\t Check In Date\t\t\t\t Check Out Date\t\t\t\t Amount\n" );
   printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
   printf("%d\t\t\t\t %s\t\t\t\t %d-%d-%d\t\t\t\t %d-%d-%d\t\t\t\t %d\n",tid, tempH1->name, d1.dd,d1.mm,d1.yy,d2.dd,d2.mm,d2.yy,amount );
+  printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n" );
+  printf("\nPress any key to continue...");
+  getch();
+  */
+  fileEntry();
 }
 void hotelFinalizing(HOTEL *op) {
   clrscr();
@@ -1253,7 +1257,7 @@ void menu(char mname[]) {
     printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
     printf("\t\t\t\t\t"); arrorHere(2, position); printf("2. Hotel Booking\n");
     printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
-    printf("\t\t\t\t\t"); arrorHere(3, position); printf("3.  Previous Records\n");
+    printf("\t\t\t\t\t"); arrorHere(3, position); printf("3. Previous Records\n");
     printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
     printf("\t\t\t\t\t"); arrorHere(4, position); printf("4. About us\n");
     printf("\t\t\t\t\t-------------------------------------------------------------------------------------------------\n");
@@ -1312,14 +1316,23 @@ void userList(USER *head, USER* temp){
         if(strcmp(temp->username,sname) == 0) {
           clrscr();
           printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-          printf("USERNAME\t\t\t\tNAME\t\t\t\tCONTACT\t\t\t\tADDRESS\n");
+          printf("\tUSERNAME\t\t\t\tNAME\t\t\t\tCONTACT\t\t\t\t\tADDRESS\n");
           printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-          printf("%s\t\t\t%s %s\t\t\t\t%s\t\t\t\t%s %s \n",temp->username, temp->ed.fName, temp->ed.lName, temp->ed.contact, temp->ed.city, temp->ed.state);
+          printf("%17s\t\t\t%13s\t\t\t\t%10s\t\t\t\t%s %s \n",temp->username, temp->ed.fName, temp->ed.contact, temp->ed.city, temp->ed.state);
         }
         temp=temp->next;
       }
+      printf("\nPress any key to return to Admin Menu...");
+      getch();
+      adminMenu();
       if(temp->next == NULL && strcmp(temp->username,sname) != 0) {
         printf("USER NOT FOUND..\n");
+        printf("\nPress any key to return to Admin Menu...");
+        getch();
+        adminMenu();
+      }
+      else {
+
       }
       break;
     }
@@ -1329,19 +1342,22 @@ void userList(USER *head, USER* temp){
       else{
         temp=head;
         printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
-        printf("USERNAME\t\t\t\tNAME\t\t\t\tCONTACT\t\t\t\tADDRESS\n");
+        printf("\tUSERNAME\t\t\t\tNAME\t\t\t\tCONTACT\t\t\t\t\tADDRESS\n");
         printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         while(temp!=NULL){
-          printf("%s\t\t\t%s %s\t\t\t\t%s\t\t\t\t%s %s \n",temp->username, temp->ed.fName, temp->ed.lName, temp->ed.contact, temp->ed.city, temp->ed.state);
+          printf("%17s\t\t\t%13s\t\t\t\t%10s\t\t\t\t%s %s \n",temp->username, temp->ed.fName, temp->ed.contact, temp->ed.city, temp->ed.state);
           temp=temp->next;
         }
       }
       printf("---------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     }
   }
+  printf("\nPress any key to return to Admin Menu...");
   getch();
+  adminMenu();
 }
 void recordBook(){
+  char key, name[25]; int id, cin_day, cin_month, cin_year, cout_day, cout_month, cout_year, amount;
   position = 1; keyPressed = 0;
   clrscr();
   while(keyPressed != 13) {
@@ -1363,46 +1379,39 @@ void recordBook(){
     case 1:{
       clrscr();
       temp=head;
-      tempf=headf;
-      if(temp==0){  if(tempf==0){
-          printf("NO FLIGHT RECORDS TO SHOW.\n");
-        }
+      if(temp==0) {
+        printf("NO FLIGHT RECORDS TO SHOW.\n");
       }
       else{
         clrscr();
         temp=head;
-        tempf=headf;
         printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         printf("TRAVLIZ ID\t\t\t\tNAME\t\t\t\tBOARDIND DATE\t\t\t\tAMOUNT PAID\n" );
         printf("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         while(temp!=NULL){
-          tempf = headf;
           char tname[100];
-          char path[] = "./Source Files/USERS\\";
+          char path[] = "./Source Files/USERS/";
           strcpy(tname, path);
           strcat(tname, temp->username);
           strcat(tname, ".txt");
           FILE *fp = fopen(tname, "r");
-          while(tempf != NULL) {
-            fprintf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", tempf->key, tempf->id, tempf->name, tempf->cin_day, tempf->cin_month, tempf->cin_year, tempf->cout_day, tempf->cout_month, tempf->cout_year, tempf->amount);
-            if(tempf->key=='h'){
-            printf("%d\t\t\t\t%s %s\t\t\t\t%d-%d-%d\t\t\t\t%d\n",tempf->id,tempf->name,tempf->cin_day,tempf->cin_month,tempf->cin_year,tempf->amount);
+          while(!feof(fp)) {
+            fscanf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n",&key, &id, name, &cin_day, &cin_month, &cin_year, &cout_day, &cout_month, &cout_year, &amount);
+            if(key=='f') {
+              printf("%d\t\t\t\t%s %s\t\t\t\t%d-%d-%d\t\t\t\t%d\n",key, id, name, cin_day, cin_month, cin_year, amount);
             }
-           tempf=tempf->next;
-         }
+          }
         fclose(fp);
           }
-          temp=temp->next;
+           printf("\nTT\n");
+          temp = temp->next;
         }
       }
     case 2:{
       clrscr();
       temp=head;
-      tempf=headf;
       if(temp==0){
-        if(tempf==0){
-          printf("NO HOTEL RECORDS TO SHOW.\n");
-        }
+        printf("NO HOTEL RECORDS TO SHOW.\n");
       }
         else{
         clrscr();
@@ -1411,19 +1420,17 @@ void recordBook(){
         printf("TRAVLIZ ID\t\t\t\tNAME\t\t\t\tCHECK IN DATE\t\t\t\tCHECK OUT DATE\t\t\t\tAMOUNT PAID\n" );
         printf("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         while(temp!=NULL){
-          tempf = headf;
           char tname[100];
-          char path[] = "./Source Files/USERS\\";
+          char path[] = "./Source Files/USERS/";
           strcpy(tname, path);
           strcat(tname, temp->username);
           strcat(tname, ".txt");
           FILE *fp = fopen(tname, "r");
-          while(tempf != NULL) {
-            fprintf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n", tempf->key, tempf->id, tempf->name, tempf->cin_day, tempf->cin_month, tempf->cin_year, tempf->cout_day, tempf->cout_month, tempf->cout_year, tempf->amount);
-            if(tempf->key=='h'){
-            printf("%d\t\t\t\t%s %s\t\t\t\t%d-%d-%d\t\t\t\t%d-%d-%d\t\t\t\t%d\n",tempf->id,tempf->name,tempf->cin_day,tempf->cin_month,tempf->cin_year,tempf->cout_day,tempf->cout_month,tempf->cout_year, tempf->amount);
+          while(!feof(fp)) {
+            fscanf(fp, "%c %d %s %d-%d-%d %d-%d-%d %d\n",&key, &id, name, &cin_day, &cin_month, &cin_year, &cout_day, &cout_month, &cout_year, &amount);
+            if(key=='h') {
+            printf("%d\t\t\t\t%s %s\t\t\t\t%d-%d-%d\t\t\t\t%d-%d-%d\t\t\t\t%d\n", key, id, name, cin_day, cin_month, cin_year, cout_day, cout_month, cout_year, amount);
             }
-           tempf=tempf->next;
          }
         fclose(fp);
         temp=temp->next;
@@ -1446,6 +1453,9 @@ void usrfeeds() {
     printf("%s ", feed);
   }
   fclose(fp);
+  printf("\nPress any key to return to Admin Menu...");
+  getch();
+  adminMenu();
 }
 void adminMenu() {
   scanID();
@@ -1470,13 +1480,9 @@ void adminMenu() {
   }
   switch(position) {
     case 1:userList(head, temp); break;
-
     case 2: recordBook(); break;
-
     case 3: revenue(); break;
-
     case 4: usrfeeds(); break;
-
     case 5: exit(0); break;
   }
   getch();
