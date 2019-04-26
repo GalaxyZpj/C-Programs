@@ -12,14 +12,14 @@ Quad 5000
 QueenBed 8000
 KingBed 10000
 Suite 17000
-Gran_Melia_Colon Seville 22902
+Hotel_The_Westin_Palace Madrid 22069
 Single 2000
 Twin 3000
 Quad 5000
 QueenBed 8000
 KingBed 10000
 Suite 17000
-Hotel_The_Westin_Palace Madrid 22069
+Gran_Melia_Colon Seville 22902
 Single 2000
 Twin 3000
 Quad 5000

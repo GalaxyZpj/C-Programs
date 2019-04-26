@@ -1,4 +1,4 @@
-Marina_Bay_Sands Singapore_Flyer 31327
+Holiday_Inn_Singapore_Atrium Merlion 8666
 Single 2000
 Twin 3000
 Quad 5000
@@ -12,13 +12,6 @@ Quad 5000
 QueenBed 8000
 KingBed 10000
 Suite 17000
-W_Singapore_Sentosa_Cove Sentosa 31409
-Single 2000
-Twin 3000
-Quad 5000
-QueenBed 8000
-KingBed 10000
-Suite 17000
 Hotel_The_Ritz_Carlton_Millenia Singapore_Flyer 26596
 Single 2000
 Twin 3000
@@ -26,7 +19,14 @@ Quad 5000
 QueenBed 8000
 KingBed 10000
 Suite 17000
-Holiday_Inn_Singapore_Atrium Merlion 8666
+Marina_Bay_Sands Singapore_Flyer 31327
+Single 2000
+Twin 3000
+Quad 5000
+QueenBed 8000
+KingBed 10000
+Suite 17000
+W_Singapore_Sentosa_Cove Sentosa 31409
 Single 2000
 Twin 3000
 Quad 5000
