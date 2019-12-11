@@ -1,3 +1,13 @@
-Open Travalista.exe
+Based on C. 
+A navigation based Booking System. 
+Heavy implementation of Link List and File Handling.
+Features:
+- Flight Booking
+- Hotel Booking
+- Admin Area
+- User Registration
+- User Login
+- Calendar Module
+- And much more!
 
-Project Closed.
+Open Travalista.exe
